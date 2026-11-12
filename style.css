@@ -190,6 +190,7 @@ img {
 }
 
 /* Track Text */
+/* Track Text */
 .track-text {
 	position: absolute;
 	right: 35px;
@@ -202,6 +203,14 @@ img {
 	text-transform: uppercase;
 	letter-spacing: 3px;
 	pointer-events: none;
+
+	/* ADD THIS: Smooth fade transition */
+	transition: opacity 0.3s ease-in-out;
+}
+
+/* ADD THIS: The class JS will toggle */
+.track-text.hide {
+	opacity: 0;
 }
 
 /* Slide Up Impact Animation */
@@ -785,8 +794,45 @@ footer {
 
 /* Ensure the button looks great on top of the image */
 #open-invite-btn {
-	margin-top: 10px;
-	/* Reusing the .btn-primary class from the main CSS */
+	margin-top: 15px;
+
+	/* 1. Make it smaller */
+	font-size: 1.1rem;
+	padding: 0.8rem 2rem;
+
+	/* 2. Hide it initially for the fly-up animation */
+	opacity: 0;
+
+	/* 3. Trigger the pop-up animation after 1.8 seconds */
+	animation: popUpButton 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.8s
+		forwards;
+}
+
+/* The Fly-Up/Pop-In Animation */
+@keyframes popUpButton {
+	0% {
+		opacity: 0;
+		/* Starts 100px below its actual position */
+		transform: translateY(100px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+/* Ensure the active click state still works perfectly */
+#open-invite-btn:active {
+	transform: translateY(6px) !important;
+	box-shadow: 0 0 0 var(--color-yellow-hover);
+}
+
+/* Accessibility: Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	#open-invite-btn {
+		animation: none;
+		opacity: 1;
+	}
 }
 
 /* Desktop adjustment: show a bit more of the image without extreme cropping */
@@ -814,4 +860,73 @@ footer {
 		opacity: 1;
 		transform: none;
 	}
+}
+
+/* --- SPLASH SCREEN FLY UP EXIT --- */
+.splash-content.fly-away {
+	/* Accelerates upwards using a smooth ease-in curve */
+	animation: flyUp 1s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
+}
+
+@keyframes flyUp {
+	0% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+	100% {
+		transform: translateY(-150vh); /* Flies completely off screen */
+		opacity: 0;
+	}
+}
+
+/* Accessibility: Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+	.splash-content.fly-away {
+		animation: fadeOut 0.5s ease-out forwards;
+	}
+	@keyframes fadeOut {
+		to {
+			opacity: 0;
+		}
+	}
+}
+
+/* --- FLOATING MUTE BUTTON --- */
+.mute-btn {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+	z-index: 10000; /* Ensures it stays on top of everything */
+
+	/* Premium Glassmorphism Styling */
+	background: rgba(50, 27, 77, 0.8);
+	border: 2px solid var(--color-yellow);
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	font-size: 1.2rem;
+	color: var(--color-white);
+	cursor: pointer;
+
+	display: none; /* Hidden by default */
+	justify-content: center;
+	align-items: center;
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+	transition:
+		transform 0.2s ease,
+		background 0.2s ease;
+}
+
+/* We will add this class via JS to show it */
+.mute-btn.active {
+	display: flex;
+}
+
+.mute-btn:hover,
+.mute-btn:focus-visible {
+	transform: scale(1.1);
+	background: rgba(50, 27, 77, 1);
+	outline: none;
 }

@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	// Slider Variables
 	const track = document.getElementById('slide-track');
+	const trackText = document.querySelector('.track-text'); // ADD THIS LINE
 	const thumb = document.getElementById('slide-thumb');
 	const curtainLeft = document.querySelector('.curtain-left');
 	const curtainRight = document.querySelector('.curtain-right');
@@ -88,6 +89,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		thumb.style.transition = 'none';
 		curtainLeft.style.transition = 'none';
 		curtainRight.style.transition = 'none';
+
+		// ADD THIS: Hide the text immediately when they grab the thumb
+		trackText.classList.add('hide');
 	};
 
 	const onDrag = (e) => {
@@ -114,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		curtainRight.style.transition = 'transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
 
 		if (currentX >= threshold) {
+			// SUCCESS! They slid it all the way.
 			thumb.style.transform = `translateX(${maxDrag}px)`;
 			thumb.style.background = '#ffffff';
 
@@ -122,12 +127,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
 			completeSlide();
 		} else {
+			// FAILED DRAG: Snap back
 			thumb.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
 			thumb.style.transform = `translateX(0)`;
 			currentX = 0;
 
 			curtainLeft.style.transform = `translateX(0)`;
 			curtainRight.style.transform = `translateX(0)`;
+
+			// ADD THIS: Bring the text back if they didn't complete the slide
+			trackText.classList.remove('hide');
 
 			setTimeout(() => { thumb.style.animation = 'breatheX 2.5s infinite ease-in-out'; }, 400);
 		}
@@ -154,6 +163,10 @@ document.addEventListener('DOMContentLoaded', () => {
 	thumb.addEventListener('keydown', (e) => {
 		if (e.key === 'Enter' || e.key === ' ') {
 			e.preventDefault();
+
+			// Hide text for keyboard users too
+			trackText.classList.add('hide');
+
 			thumb.style.transform = `translateX(${maxDrag}px)`;
 			thumb.style.background = '#ffffff';
 			curtainLeft.style.transform = `translateX(-100%)`;
@@ -165,9 +178,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	// ==========================================
 	// 5. FLOW ACT 3 -> ACT 4 (Video -> Splash)
 	// ==========================================
+	const bgMusic = document.getElementById('bg-music');
+	const muteBtn = document.getElementById('mute-btn');
+	let isMusicMuted = false;
+
 	video.addEventListener('ended', () => {
 
-		// 1. Instantly swap the scenes (since the video already faded to white)
+		// 1. Instantly swap the scenes
 		scenes.start.classList.remove('active');
 		scenes.start.style.display = 'none';
 
@@ -182,19 +199,50 @@ document.addEventListener('DOMContentLoaded', () => {
 		// 3. Trigger Splash Animations
 		const splashLogo = document.querySelector('.splash-logo');
 		const splashText = document.querySelector('.splash-text');
+		const splashContent = document.querySelector('.splash-content');
+
 		setTimeout(() => {
 			splashLogo.classList.add('animate-in');
 			splashText.classList.add('animate-in');
 		}, 100);
 
-		// 4. Auto transition to Main Event after 4 seconds
+		// 4. TRIGGER FLY AWAY
+		setTimeout(() => {
+			splashContent.classList.add('fly-away');
+		}, 3200);
+
+		// 5. Auto transition to Main Event
 		setTimeout(() => {
 			switchScene(scenes.splash, scenes.main);
 			triggerConfetti();
 			initScrollAnimations();
-		}, 4000);
+
+			// --- START BACKGROUND MUSIC HERE ---
+			if (bgMusic) {
+				bgMusic.volume = 0.4; // Set to 40% volume so it's pleasant
+				bgMusic.play().catch(e => console.log("BG music autoplay blocked:", e));
+				muteBtn.classList.add('active'); // Show the mute button
+			}
+
+		}, 4200);
 
 	});
+
+	// --- MUTE BUTTON LOGIC ---
+	if (muteBtn) {
+		muteBtn.addEventListener('click', () => {
+			if (isMusicMuted) {
+				bgMusic.play();
+				muteBtn.innerText = '🔊';
+				muteBtn.setAttribute('aria-label', 'Mute background music');
+			} else {
+				bgMusic.pause();
+				muteBtn.innerText = '🔇';
+				muteBtn.setAttribute('aria-label', 'Unmute background music');
+			}
+			isMusicMuted = !isMusicMuted;
+		});
+	}
 
 	// ==========================================
 	// 6. COUNTDOWN TIMER & RSVP (No changes)

@@ -33,20 +33,17 @@
 			class="scene active"
 			aria-label="Invitation Reveal"
 		>
-			<img
-				src="scene3-baby.jpg"
-				alt="Baby Szhawn"
-				class="scene2-baby-img"
-			/>
+			<img src="baby.jpg" alt="Baby Szhawn" class="scene2-baby-img" />
 			<div class="invite-overlay">
 				<h2 class="invite-heading">Hello! I am Szhawn.</h2>
 				<p class="invite-subtext">I am inviting you to a party!</p>
+				<!-- Text updated, aria-label updated -->
 				<button
 					id="open-invite-btn"
 					class="btn-primary"
-					aria-label="Open Invitation"
+					aria-label="Tap to continue to the party"
 				>
-					Open Invitation
+					Tap to continue
 				</button>
 			</div>
 		</section>
@@ -54,7 +51,7 @@
 		<!-- SCENE 1: THE INTERACTIVE REVEAL (Slide + Curtains + Video) -->
 		<section id="scene-start" class="scene" aria-label="Start Screen">
 			<video id="intro-video" playsinline preload="auto">
-				<source src="your-video.mp4" type="video/mp4" />
+				<source src="grimace-video.mp4" type="video/mp4" />
 			</video>
 
 			<div class="curtain-container">
@@ -91,7 +88,9 @@
 			<audio id="splash-audio">
 				<source src="love-ko-to-sound.mp3" type="audio/mpeg" />
 			</audio>
+
 			<div class="splash-content">
+				<!-- Logo and Text -->
 				<img
 					src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg"
 					alt="McDonald's Logo"
@@ -310,6 +309,20 @@
 				<p>&copy; 2026 Szhawn's Party. Made with 💜 & 🍟</p>
 			</footer>
 		</main>
+
+		<!-- BACKGROUND MUSIC FOR MAIN EVENT -->
+		<audio id="bg-music" loop>
+			<source src="bday.mp3" type="audio/mpeg" />
+		</audio>
+
+		<!-- Floating Mute Button (Hidden initially) -->
+		<button
+			id="mute-btn"
+			class="mute-btn"
+			aria-label="Mute background music"
+		>
+			🔊
+		</button>
 
 		<script src="script.js" defer></script>
 	</body>
