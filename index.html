@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Szhawn's 1st Birthday & Christening</title>
+		<meta
+			name="description"
+			content="You are invited to celebrate Szhawn's 1st Birthday and Christening!"
+		/>
+
+		<!-- Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap"
+			rel="stylesheet"
+		/>
+
+		<!-- Styles -->
+		<link rel="stylesheet" href="style.css" />
+
+		<!-- Confetti Library -->
+		<script
+			src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"
+			defer
+		></script>
+	</head>
+	<body>
+		<!-- SCENE 1: SPLASH SCREEN -->
+		<section id="scene-splash" class="scene active" aria-label="Loading">
+			<div class="splash-logo">
+				<img
+					src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg"
+					alt="McDonald's Logo"
+					width="100"
+					height="100"
+				/>
+			</div>
+		</section>
+
+		<!-- SCENE 2: INVITATION -->
+		<section id="scene-invite" class="scene" aria-label="Invitation">
+			<div class="invite-content">
+				<h1 class="heading">Wow!</h1>
+				<p class="subtitle">
+					You have received an invitation from
+					<strong>Szhawn</strong>!
+				</p>
+				<button
+					id="open-invite-btn"
+					class="btn-primary"
+					aria-label="Open Invitation"
+				>
+					Open Invitation
+				</button>
+			</div>
+		</section>
+
+		<!-- SCENE 3: VIDEO TRANSITION -->
+		<section id="scene-video" class="scene" aria-label="Video Presentation">
+			<div class="video-container">
+				<!-- Replace with your actual video link -->
+				<video id="intro-video" playsinline controls preload="metadata">
+					<source src="your-video.mp4" type="video/mp4" />
+					Your browser does not support the video tag.
+				</video>
+				<button
+					id="skip-video-btn"
+					class="btn-skip"
+					aria-label="Skip Video"
+				>
+					Skip Video &rarr;
+				</button>
+			</div>
+		</section>
+
+		<!-- SCENE 4: MAIN CONTENT -->
+		<main
+			id="scene-main"
+			class="scene"
+			aria-label="Main Invitation Details"
+		>
+			<!-- Hero Section -->
+			<header class="hero">
+				<div class="hero-text">
+					<h1 class="heading animate-on-scroll">Party Time!</h1>
+					<p class="subtitle animate-on-scroll">
+						Join us in celebrating<br /><strong
+							>Szhawn's 1st Birthday & Christening</strong
+						>
+					</p>
+				</div>
+				<div class="hero-image animate-on-scroll">
+					<!-- Placeholder for Baby Image -->
+					<img
+						src="https://placehold.co/400x400/4b2c70/ffc72c?text=Szhawn"
+						alt="Baby Szhawn"
+						class="baby-photo"
+					/>
+				</div>
+
+				<!-- Details & Countdown -->
+				<div class="event-details animate-on-scroll">
+					<div class="detail-item">
+						<span class="icon">📅</span>
+						<p>Date: <strong>October 25, 2026</strong></p>
+					</div>
+					<div class="detail-item">
+						<span class="icon">⏰</span>
+						<p>Time: <strong>1:00 PM</strong></p>
+					</div>
+					<div class="detail-item">
+						<span class="icon">📍</span>
+						<p>Venue: <strong>McDonald's Party Room</strong></p>
+					</div>
+				</div>
+
+				<div
+					id="countdown"
+					class="countdown-container animate-on-scroll"
+					aria-live="polite"
+				>
+					<!-- JS will inject countdown here -->
+				</div>
+			</header>
+
+			<!-- Program of Events -->
+			<section class="section program">
+				<h2 class="heading animate-on-scroll">Program</h2>
+				<div class="timeline">
+					<div class="timeline-item animate-on-scroll">
+						<div class="time">1:00 PM</div>
+						<div class="content">Arrival & Registration</div>
+					</div>
+					<div class="timeline-item animate-on-scroll">
+						<div class="time">1:30 PM</div>
+						<div class="content">Christening Ceremony</div>
+					</div>
+					<div class="timeline-item animate-on-scroll">
+						<div class="time">2:30 PM</div>
+						<div class="content">Games & Grimace Appearances</div>
+					</div>
+					<div class="timeline-item animate-on-scroll">
+						<div class="time">3:30 PM</div>
+						<div class="content">Cake Cutting & Lunch</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Baby's Progress Timeline -->
+			<section class="section milestones">
+				<h2 class="heading animate-on-scroll">Growing Up!</h2>
+				<p class="text-center animate-on-scroll">
+					From 1 month to 11 months.
+				</p>
+				<div class="milestone-grid">
+					<!-- JS can generate this, but for simplicity, we do a few manually. Add images here -->
+					<div class="milestone-card animate-on-scroll">
+						<img
+							src="https://placehold.co/150x150/ffc72c/4b2c70?text=1+M"
+							alt="1 Month Old"
+						/>
+						<p>1 Month</p>
+					</div>
+					<div class="milestone-card animate-on-scroll">
+						<img
+							src="https://placehold.co/150x150/ffc72c/4b2c70?text=6+M"
+							alt="6 Months Old"
+						/>
+						<p>6 Months</p>
+					</div>
+					<div class="milestone-card animate-on-scroll">
+						<img
+							src="https://placehold.co/150x150/ffc72c/4b2c70?text=11+M"
+							alt="11 Months Old"
+						/>
+						<p>11 Months</p>
+					</div>
+				</div>
+			</section>
+
+			<!-- Message from Parents -->
+			<section class="section message">
+				<h2 class="heading animate-on-scroll">
+					A Message from Mommy & Daddy
+				</h2>
+				<blockquote class="animate-on-scroll">
+					"Our little Szhawn has brought so much joy into our lives.
+					We can't wait to celebrate his first year and his baptism
+					with you!"
+				</blockquote>
+			</section>
+
+			<!-- Google Map -->
+			<section class="section map-section">
+				<h2 class="heading animate-on-scroll">Location</h2>
+				<div class="map-container animate-on-scroll">
+					<!-- Replace src with your specific Google Maps embed link -->
+					<iframe
+						src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345!2d-122.084!3d37.422!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMzfCsDI1JzE5LjIiTiAxMjLCsDA1JzAyLjQiVw!5e0!3m2!1sen!2sus!4v1234567890"
+						width="100%"
+						height="400"
+						style="border: 0"
+						allowfullscreen=""
+						loading="lazy"
+						referrerpolicy="no-referrer-when-downgrade"
+						title="Event Location Map"
+					></iframe>
+				</div>
+			</section>
+
+			<!-- RSVP Form -->
+			<section class="section rsvp">
+				<h2 class="heading animate-on-scroll">RSVP</h2>
+				<p class="text-center animate-on-scroll">
+					Please let us know if you can make it by Oct 15.
+				</p>
+
+				<!-- Using Web3Forms for free emailing -->
+				<form
+					id="rsvp-form"
+					class="animate-on-scroll"
+					action="https://api.web3forms.com/submit"
+					method="POST"
+				>
+					<!-- Get your free access key from web3forms.com and paste it here -->
+					<input
+						type="hidden"
+						name="access_key"
+						value="YOUR_ACCESS_KEY_HERE"
+					/>
+					<input
+						type="hidden"
+						name="subject"
+						value="New RSVP for Szhawn's Party!"
+					/>
+					<input
+						type="checkbox"
+						name="botcheck"
+						class="hidden"
+						style="display: none"
+					/>
+
+					<div class="form-group">
+						<label for="name">Your Name</label>
+						<input
+							type="text"
+							id="name"
+							name="name"
+							required
+							placeholder="John Doe"
+						/>
+					</div>
+					<div class="form-group">
+						<label for="attendance">Will you attend?</label>
+						<select id="attendance" name="attendance" required>
+							<option value="">Select an option...</option>
+							<option value="Yes">Yes, I'll be there!</option>
+							<option value="No">Sorry, I can't make it.</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="guests"
+							>Number of Guests (Including yourself)</label
+						>
+						<input
+							type="number"
+							id="guests"
+							name="guests"
+							min="1"
+							max="10"
+							value="1"
+						/>
+					</div>
+					<button type="submit" class="btn-primary">Send RSVP</button>
+				</form>
+			</section>
+
+			<!-- Footer -->
+			<footer>
+				<p>&copy; 2026 Szhawn's Party. Made with 💜 & 🍟</p>
+			</footer>
+		</main>
+
+		<script src="script.js" defer></script>
+	</body>
+</html>
