@@ -247,7 +247,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	// ==========================================
 	// 6. COUNTDOWN TIMER & RSVP (No changes)
 	// ==========================================
-	const eventDate = new Date(2026, 9, 25, 13, 0, 0).getTime();
+	// December is month 11 (since January is 0)
+	const eventDate = new Date(2026, 11, 13, 10, 0, 0).getTime(); // Dec 13, 2026 at 10:00 AM
 
 	const updateCountdown = () => {
 		const now = new Date().getTime();
@@ -272,6 +273,47 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="count-box"><span>${seconds}</span><small>Secs</small></div>
         `;
 	};
+
+	// ==========================================
+	// 7. ADD TO CALENDAR (.ics) GENERATOR
+	// ==========================================
+	const calendarBtn = document.getElementById('add-to-calendar-btn');
+
+	if (calendarBtn) {
+		calendarBtn.addEventListener('click', () => {
+			// Event Details
+			const title = "Szhawn's 1st Birthday & Christening";
+			const location = "Holy Cross Parish & Hall, Valenzuela, Metro Manila";
+			// Format: YYYYMMDDTHHmmSS (Local time)
+			// Make sure to update these to match the actual date (Dec 13, 2026 at 10:00 AM)
+			const startTime = "20261213T100000";
+			const endTime = "20261213T140000"; // Assuming it ends at 2:00 PM
+			const description = "Join us in celebrating Szhawn's special day!";
+
+			// ICS File Formatting
+			const icsContent = `BEGIN:VCALENDAR
+				VERSION:2.0
+				PRODID:-//Szhawn Invite//EN
+				BEGIN:VEVENT
+				SUMMARY:${title}
+				DTSTART:${startTime}
+				DTEND:${endTime}
+				LOCATION:${location}
+				DESCRIPTION:${description}
+				STATUS:CONFIRMED
+				END:VEVENT
+				END:VCALENDAR`;
+
+			// Create the file and trigger download
+			const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+			const link = document.createElement('a');
+			link.href = window.URL.createObjectURL(blob);
+			link.download = 'Szhawn_Party_Invite.ics';
+			document.body.appendChild(link);
+			link.click();
+			document.body.removeChild(link);
+		});
+	}
 
 	setInterval(updateCountdown, 1000);
 	updateCountdown();

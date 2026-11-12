@@ -110,39 +110,126 @@
 		>
 			<!-- Hero Section -->
 			<header class="hero">
-				<div class="hero-text">
-					<h1 class="heading animate-on-scroll">Party Time!</h1>
-					<p class="subtitle animate-on-scroll">
-						Join us in celebrating<br /><strong
-							>Szhawn's 1st Birthday & Christening</strong
-						>
+				<div class="hero-text animate-on-scroll">
+					<!-- The Badge -->
+					<div class="event-badge">
+						<span>1st Birthday</span>
+						<span class="dot">•</span>
+						<span>Holy Baptism</span>
+					</div>
+
+					<!-- The Text -->
+					<p class="hero-pre-title">
+						Join Us For The Double Celebration Of
 					</p>
-				</div>
-				<div class="hero-image animate-on-scroll">
-					<!-- Placeholder for Baby Image -->
-					<img
-						src="https://placehold.co/400x400/4b2c70/ffc72c?text=Szhawn"
-						alt="Baby Szhawn"
-						class="baby-photo"
-					/>
-				</div>
+					<h1 class="heading">SZHAWN MARQ<br />RESURRECTION</h1>
 
-				<!-- Details & Countdown -->
-				<div class="event-details animate-on-scroll">
-					<div class="detail-item">
-						<span class="icon">📅</span>
-						<p>Date: <strong>October 25, 2026</strong></p>
-					</div>
-					<div class="detail-item">
-						<span class="icon">⏰</span>
-						<p>Time: <strong>1:00 PM</strong></p>
-					</div>
-					<div class="detail-item">
-						<span class="icon">📍</span>
-						<p>Venue: <strong>McDonald's Party Room</strong></p>
+					<!-- The Bear Avatar -->
+					<div class="bear-avatar-wrapper animate-on-scroll">
+						<div class="bear-ear ear-left"></div>
+						<div class="bear-ear ear-right"></div>
+						<img
+							src="baby.jpg"
+							alt="Szhawn Marq"
+							class="avatar-photo"
+						/>
 					</div>
 				</div>
 
+				<!-- PASTE THE PREMIUM CARD HERE -->
+				<div class="premium-card animate-on-scroll">
+					<!-- Date & Time -->
+					<div class="detail-row">
+						<div class="icon-bg icon-purple">
+							<svg
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="2"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+							>
+								<rect
+									x="3"
+									y="4"
+									width="18"
+									height="18"
+									rx="2"
+									ry="2"
+								></rect>
+								<line x1="16" y1="2" x2="16" y2="6"></line>
+								<line x1="8" y1="2" x2="8" y2="6"></line>
+								<line x1="3" y1="10" x2="21" y2="10"></line>
+								<path
+									d="M12 14h.01M8 14h.01M16 14h.01M12 18h.01M8 18h.01M16 18h.01"
+								></path>
+							</svg>
+						</div>
+						<div class="detail-text">
+							<span class="detail-label">DATE & TIME</span>
+							<span class="detail-main"
+								>Sunday, Dec 13, 2026</span
+							>
+							<span class="detail-sub">10:00 AM PHT (GMT+8)</span>
+						</div>
+					</div>
+
+					<!-- Location -->
+					<div class="detail-row">
+						<div class="icon-bg icon-yellow">
+							<svg
+								width="24"
+								height="24"
+								viewBox="0 0 24 24"
+								fill="currentColor"
+							>
+								<path
+									d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+								/>
+							</svg>
+						</div>
+						<div class="detail-text">
+							<span class="detail-label">LOCATION</span>
+							<span class="detail-main"
+								>Holy Cross Parish & Hall</span
+							>
+							<span class="detail-sub"
+								>Valenzuela, Metro Manila</span
+							>
+						</div>
+					</div>
+
+					<!-- Add to Calendar Button -->
+					<button id="add-to-calendar-btn" class="btn-calendar">
+						<svg
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<rect
+								x="3"
+								y="4"
+								width="18"
+								height="18"
+								rx="2"
+								ry="2"
+							></rect>
+							<line x1="16" y1="2" x2="16" y2="6"></line>
+							<line x1="8" y1="2" x2="8" y2="6"></line>
+							<line x1="3" y1="10" x2="21" y2="10"></line>
+						</svg>
+						Add to Calendar (.ics)
+					</button>
+				</div>
+
+				<!-- Countdown stays below -->
 				<div
 					id="countdown"
 					class="countdown-container animate-on-scroll"

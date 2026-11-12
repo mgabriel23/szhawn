@@ -893,18 +893,17 @@ footer {
 
 /* --- FLOATING MUTE BUTTON --- */
 .mute-btn {
-	position: fixed;
-	bottom: 20px;
-	right: 20px;
-	z-index: 10000; /* Ensures it stays on top of everything */
+	position: fixed !important;
+	bottom: 24px !important;
+	right: 24px !important;
+	z-index: 2147483647 !important; /* Maximum possible z-index */
 
-	/* Premium Glassmorphism Styling */
-	background: rgba(50, 27, 77, 0.8);
+	background: rgba(50, 27, 77, 0.85);
 	border: 2px solid var(--color-yellow);
 	border-radius: 50%;
-	width: 50px;
-	height: 50px;
-	font-size: 1.2rem;
+	width: 55px;
+	height: 55px;
+	font-size: 1.3rem;
 	color: var(--color-white);
 	cursor: pointer;
 
@@ -913,15 +912,14 @@ footer {
 	align-items: center;
 	backdrop-filter: blur(10px);
 	-webkit-backdrop-filter: blur(10px);
-	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+	box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 	transition:
 		transform 0.2s ease,
 		background 0.2s ease;
 }
 
-/* We will add this class via JS to show it */
 .mute-btn.active {
-	display: flex;
+	display: flex !important;
 }
 
 .mute-btn:hover,
@@ -929,4 +927,302 @@ footer {
 	transform: scale(1.1);
 	background: rgba(50, 27, 77, 1);
 	outline: none;
+}
+
+/* --- PREMIUM DETAILS CARD --- */
+.premium-card {
+	background: var(--color-white);
+	border-radius: 24px;
+	padding: 24px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	width: 100%;
+	max-width: 420px;
+	color: var(--color-purple-dark);
+	/* Slight margin to separate from the text above */
+	margin: 10px auto;
+}
+
+/* The Row (Icon + Text) */
+.detail-row {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+
+/* The Icon Backgrounds */
+.icon-bg {
+	width: 52px;
+	height: 52px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.icon-purple {
+	background-color: #f3e8ff; /* Soft purple */
+	color: #9333ea; /* Bold purple */
+}
+
+.icon-yellow {
+	background-color: #fef08a; /* Soft yellow */
+	color: #ca8a04; /* Darker yellow/gold */
+}
+
+/* Text Styling */
+.detail-text {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.detail-label {
+	font-family: var(--font-body);
+	font-size: 0.75rem;
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	color: #888;
+	margin-bottom: 2px;
+}
+
+.detail-main {
+	font-family: var(--font-body);
+	font-size: 1.1rem;
+	font-weight: 900;
+	line-height: 1.2;
+}
+
+.detail-sub {
+	font-family: var(--font-body);
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: #9333ea; /* Purple for time/location sub-text */
+}
+
+/* The Calendar Button */
+.btn-calendar {
+	background-color: var(--color-yellow);
+	color: var(--color-purple-dark);
+	border: none;
+	border-radius: 50px;
+	padding: 16px;
+	font-family: var(--font-body);
+	font-size: 1rem;
+	font-weight: 900;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	cursor: pointer;
+	transition:
+		transform 0.2s,
+		background-color 0.2s,
+		box-shadow 0.2s;
+	box-shadow: 0 4px 10px rgba(255, 199, 44, 0.3);
+}
+
+.btn-calendar:hover {
+	background-color: var(--color-yellow-hover);
+	transform: translateY(-2px);
+	box-shadow: 0 6px 15px rgba(255, 199, 44, 0.4);
+}
+
+.btn-calendar:active {
+	transform: translateY(0);
+}
+
+/* --- PREMIUM BEAR AVATAR --- */
+.bear-avatar-wrapper {
+	position: relative;
+	width: 180px;
+	height: 180px;
+	margin: 0 auto 2.5rem auto; /* Centered with good bottom spacing */
+	margin-top: 30px; /* Extra space on top for the ears */
+	z-index: 1;
+}
+
+/* The Ears */
+.bear-ear {
+	position: absolute;
+	width: 70px;
+	height: 70px;
+	border-radius: 50%;
+	background-color: #7b4da1; /* Mid-purple to match the image */
+	border: 6px solid var(--color-white);
+	top: -20px; /* Pushed up */
+	z-index: -1; /* Tucked behind the main photo */
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.ear-left {
+	left: -10px;
+}
+
+.ear-right {
+	right: -10px;
+}
+
+/* The Main Photo */
+.avatar-photo {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	object-fit: cover;
+
+	/* The White Inner Border */
+	border: 6px solid var(--color-white);
+
+	/* The Purple Outer Ring + Drop Shadow */
+	box-shadow:
+		0 0 0 8px #7b4da1,
+		0 10px 25px rgba(0, 0, 0, 0.4);
+
+	position: relative;
+	z-index: 2;
+
+	/* Keep the smooth floating animation */
+	animation: floatAvatar 4s ease-in-out infinite;
+}
+
+@keyframes floatAvatar {
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-10px);
+	}
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 400px) {
+	.bear-avatar-wrapper {
+		width: 150px;
+		height: 150px;
+	}
+	.bear-ear {
+		width: 55px;
+		height: 55px;
+		top: -15px;
+	}
+	.avatar-photo {
+		border: 5px solid var(--color-white);
+		box-shadow:
+			0 0 0 6px #7b4da1,
+			0 10px 25px rgba(0, 0, 0, 0.4);
+	}
+}
+
+/* =========================================
+   ULTRA-SMALL SCREENS (320px - 400px)
+   ========================================= */
+@media (max-width: 400px) {
+	/* 1. Reduce overall Hero spacing */
+	.hero {
+		padding: 2rem 1rem; /* Less padding for tiny screens */
+		gap: 1.5rem;
+	}
+
+	/* 2. Scale down the Badge */
+	.event-badge {
+		font-size: 0.65rem; /* Smaller text */
+		padding: 6px 12px;
+		letter-spacing: 1px;
+		gap: 4px;
+		margin-bottom: 1rem;
+	}
+	.event-badge .dot {
+		font-size: 1rem;
+	}
+
+	/* 3. Scale down the Pre-title */
+	.hero-pre-title {
+		font-size: 0.75rem;
+		letter-spacing: 1.5px;
+		margin-bottom: 0.5rem;
+	}
+
+	/* 4. Scale down the Main Name Heading */
+	.hero .heading {
+		/* Override the clamp minimum (2.5rem) to prevent overflow */
+		font-size: 2rem;
+		line-height: 1.1;
+		margin-bottom: 1.5rem;
+	}
+
+	/* 5. Scale down the Bear Avatar */
+	.bear-avatar-wrapper {
+		width: 130px;
+		height: 130px;
+		margin-top: 20px;
+		margin-bottom: 1.5rem;
+	}
+	.bear-ear {
+		width: 45px;
+		height: 45px;
+		top: -12px;
+		border-width: 4px;
+	}
+	.ear-left {
+		left: -5px;
+	}
+	.ear-right {
+		right: -5px;
+	}
+
+	.avatar-photo {
+		border: 4px solid var(--color-white);
+		/* Scale down the purple outer ring shadow */
+		box-shadow:
+			0 0 0 5px #7b4da1,
+			0 8px 20px rgba(0, 0, 0, 0.4);
+	}
+
+	/* 6. Adjust the Premium Details Card */
+	.premium-card {
+		padding: 16px; /* Reduce padding from 24px */
+		gap: 16px;
+		border-radius: 16px;
+	}
+	.detail-row {
+		gap: 12px; /* Less gap between icon and text */
+	}
+	.icon-bg {
+		width: 44px;
+		height: 44px; /* Slightly smaller icons */
+	}
+	.icon-bg svg {
+		width: 20px;
+		height: 20px;
+	}
+	.detail-main {
+		font-size: 1rem; /* Slightly smaller main text */
+	}
+	.detail-sub {
+		font-size: 0.8rem;
+	}
+	.btn-calendar {
+		padding: 12px;
+		font-size: 0.9rem;
+	}
+
+	/* 7. Adjust the Countdown Boxes so 4 fit in a row */
+	.countdown-container {
+		gap: 8px; /* Tighter gap */
+	}
+	.count-box {
+		min-width: 60px; /* Smaller boxes */
+		padding: 10px 5px;
+	}
+	.count-box span {
+		font-size: 1.5rem;
+	}
+	.count-box small {
+		font-size: 0.65rem;
+	}
 }
