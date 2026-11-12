@@ -27,26 +27,20 @@
 		></script>
 	</head>
 	<body>
-		<!-- SCENE 1: SPLASH SCREEN -->
-		<section id="scene-splash" class="scene active" aria-label="Loading">
-			<div class="splash-logo">
-				<img
-					src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg"
-					alt="McDonald's Logo"
-					width="100"
-					height="100"
-				/>
-			</div>
-		</section>
-
-		<!-- SCENE 2: INVITATION -->
-		<section id="scene-invite" class="scene" aria-label="Invitation">
-			<div class="invite-content">
-				<h1 class="heading">Wow!</h1>
-				<p class="subtitle">
-					You have received an invitation from
-					<strong>Szhawn</strong>!
-				</p>
+		<!-- SCENE 0: THE TEASER (Now first) -->
+		<section
+			id="scene-invite"
+			class="scene active"
+			aria-label="Invitation Reveal"
+		>
+			<img
+				src="scene3-baby.jpg"
+				alt="Baby Szhawn"
+				class="scene2-baby-img"
+			/>
+			<div class="invite-overlay">
+				<h2 class="invite-heading">Hello! I am Szhawn.</h2>
+				<p class="invite-subtext">I am inviting you to a party!</p>
 				<button
 					id="open-invite-btn"
 					class="btn-primary"
@@ -57,21 +51,55 @@
 			</div>
 		</section>
 
-		<!-- SCENE 3: VIDEO TRANSITION -->
-		<section id="scene-video" class="scene" aria-label="Video Presentation">
-			<div class="video-container">
-				<!-- Replace with your actual video link -->
-				<video id="intro-video" playsinline controls preload="metadata">
-					<source src="your-video.mp4" type="video/mp4" />
-					Your browser does not support the video tag.
-				</video>
+		<!-- SCENE 1: THE INTERACTIVE REVEAL (Slide + Curtains + Video) -->
+		<section id="scene-start" class="scene" aria-label="Start Screen">
+			<video id="intro-video" playsinline preload="auto">
+				<source src="your-video.mp4" type="video/mp4" />
+			</video>
+
+			<div class="curtain-container">
+				<div class="curtain curtain-left"></div>
+				<div class="curtain curtain-right"></div>
+			</div>
+
+			<div id="slide-track" class="slide-track slide-up-enter">
+				<span class="track-text">Slide to open</span>
 				<button
-					id="skip-video-btn"
-					class="btn-skip"
-					aria-label="Skip Video"
+					id="slide-thumb"
+					class="slide-thumb"
+					aria-label="Slide right to open"
 				>
-					Skip Video &rarr;
+					<svg
+						class="tap-icon"
+						width="24"
+						height="24"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="3"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+					>
+						<path d="M5 12h14M12 5l7 7-7 7" />
+					</svg>
 				</button>
+			</div>
+		</section>
+
+		<!-- SCENE 2: SPLASH SCREEN -->
+		<section id="scene-splash" class="scene" aria-label="Loading">
+			<audio id="splash-audio">
+				<source src="love-ko-to-sound.mp3" type="audio/mpeg" />
+			</audio>
+			<div class="splash-content">
+				<img
+					src="https://upload.wikimedia.org/wikipedia/commons/3/36/McDonald%27s_Golden_Arches.svg"
+					alt="McDonald's Logo"
+					class="splash-logo"
+					width="120"
+					height="120"
+				/>
+				<h1 class="splash-text">Love ko 'to</h1>
 			</div>
 		</section>
 
