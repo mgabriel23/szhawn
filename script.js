@@ -4,19 +4,21 @@ document.addEventListener('DOMContentLoaded', () => {
 	// 1. SCENE MANAGER & VARIABLES
 	// ==========================================
 	const scenes = {
-		invite: document.getElementById('scene-invite'), // Now Act 1
-		start: document.getElementById('scene-start'),   // Now Act 2 & 3
-		splash: document.getElementById('scene-splash'), // Now Act 4
-		main: document.getElementById('scene-main')      // Now Act 5
+		invite: document.getElementById('scene-invite'),
+		start: document.getElementById('scene-start'),
+		main: document.getElementById('scene-main') // Splash removed as requested
 	};
 
 	const video = document.getElementById('intro-video');
-	const splashAudio = document.getElementById('splash-audio');
-	const whiteOverlay = document.getElementById('video-fade-overlay');
+
+	// ADDED: Missing Audio & Mute Variables
+	const bgMusic = document.getElementById('bg-music');
+	const muteBtn = document.getElementById('mute-btn');
+	let isMusicMuted = false;
 
 	// Slider Variables
 	const track = document.getElementById('slide-track');
-	const trackText = document.querySelector('.track-text'); // ADD THIS LINE
+	const trackText = document.querySelector('.track-text');
 	const thumb = document.getElementById('slide-thumb');
 	const curtainLeft = document.querySelector('.curtain-left');
 	const curtainRight = document.querySelector('.curtain-right');
@@ -38,24 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
 			nextScene.classList.add('active');
 			window.scrollTo(0, 0);
 		}, 400);
-	};
-
-	const triggerConfetti = () => {
-		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-		var duration = 3 * 1000;
-		var animationEnd = Date.now() + duration;
-		var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-
-		function randomInRange(min, max) { return Math.random() * (max - min) + min; }
-
-		var interval = setInterval(function () {
-			var timeLeft = animationEnd - Date.now();
-			if (timeLeft <= 0) return clearInterval(interval);
-
-			var particleCount = 50 * (timeLeft / duration);
-			confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-			confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-		}, 250);
 	};
 
 	const initScrollAnimations = () => {
@@ -89,8 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		thumb.style.transition = 'none';
 		curtainLeft.style.transition = 'none';
 		curtainRight.style.transition = 'none';
-
-		// ADD THIS: Hide the text immediately when they grab the thumb
 		trackText.classList.add('hide');
 	};
 
@@ -118,26 +100,18 @@ document.addEventListener('DOMContentLoaded', () => {
 		curtainRight.style.transition = 'transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
 
 		if (currentX >= threshold) {
-			// SUCCESS! They slid it all the way.
 			thumb.style.transform = `translateX(${maxDrag}px)`;
 			thumb.style.background = '#ffffff';
-
 			curtainLeft.style.transform = `translateX(-100%)`;
 			curtainRight.style.transform = `translateX(100%)`;
-
 			completeSlide();
 		} else {
-			// FAILED DRAG: Snap back
 			thumb.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
 			thumb.style.transform = `translateX(0)`;
 			currentX = 0;
-
 			curtainLeft.style.transform = `translateX(0)`;
 			curtainRight.style.transform = `translateX(0)`;
-
-			// ADD THIS: Bring the text back if they didn't complete the slide
 			trackText.classList.remove('hide');
-
 			setTimeout(() => { thumb.style.animation = 'breatheX 2.5s infinite ease-in-out'; }, 400);
 		}
 	};
@@ -146,8 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
 		track.style.transition = 'opacity 0.3s ease';
 		track.style.opacity = '0';
 		setTimeout(() => { track.style.display = 'none'; }, 300);
-
-		// Play video immediately while curtains are opening
 		video.play().catch(e => console.log("Video autoplay failed:", e));
 	};
 
@@ -163,10 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	thumb.addEventListener('keydown', (e) => {
 		if (e.key === 'Enter' || e.key === ' ') {
 			e.preventDefault();
-
-			// Hide text for keyboard users too
 			trackText.classList.add('hide');
-
 			thumb.style.transform = `translateX(${maxDrag}px)`;
 			thumb.style.background = '#ffffff';
 			curtainLeft.style.transform = `translateX(-100%)`;
@@ -176,57 +145,114 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	// ==========================================
-	// 5. FLOW ACT 3 -> ACT 4 (Video -> Splash)
+	// 5. SUPER CONFETTI BURST
 	// ==========================================
-	const bgMusic = document.getElementById('bg-music');
-	const muteBtn = document.getElementById('mute-btn');
-	let isMusicMuted = false;
+	const triggerSuperConfetti = () => {
+		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-	video.addEventListener('ended', () => {
+		// 1. The Initial Massive Burst (Center screen)
+		confetti({
+			particleCount: 150,
+			spread: 100,
+			origin: { y: 0.6 },
+			zIndex: 9999,
+			colors: ['#ffc72c', '#DA291C', '#4b2c70', '#ffffff'],
+			disableForReducedMotion: true
+		});
 
-		// 1. Instantly swap the scenes
-		scenes.start.classList.remove('active');
-		scenes.start.style.display = 'none';
+		// 2. The Cascading Rain (Sides)
+		var duration = 3 * 1000;
+		var animationEnd = Date.now() + duration;
+		var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
 
-		scenes.splash.style.display = '';
-		scenes.splash.classList.add('active');
+		function randomInRange(min, max) { return Math.random() * (max - min) + min; }
 
-		// 2. Play the "Love ko 'to" sound effect
-		if (splashAudio) {
-			splashAudio.play().catch(error => console.log("Audio play failed:", error));
+		var interval = setInterval(function () {
+			var timeLeft = animationEnd - Date.now();
+			if (timeLeft <= 0) return clearInterval(interval);
+
+			var particleCount = 40 * (timeLeft / duration);
+			confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+			confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+		}, 250);
+	};
+
+	// ==========================================
+	// 6. FLOW ACT 3 -> ACT 5 (Video -> Main Event)
+	// ==========================================
+	let hasTransitionedToMain = false;
+
+	const transitionToMain = () => {
+		if (hasTransitionedToMain) return;
+		hasTransitionedToMain = true;
+
+		// 1. Play Background Music & Show Mute Button
+		if (bgMusic) {
+			bgMusic.volume = 0.4;
+			bgMusic.play().catch(e => console.log("BG music autoplay blocked:", e));
+			muteBtn.classList.add('active');
 		}
 
-		// 3. Trigger Splash Animations
-		const splashLogo = document.querySelector('.splash-logo');
-		const splashText = document.querySelector('.splash-text');
-		const splashContent = document.querySelector('.splash-content');
+		// 2. Fire the Confetti IMMEDIATELY
+		triggerSuperConfetti();
 
+		// 3. Wait 200ms for the confetti to burst, then swap scenes
 		setTimeout(() => {
-			splashLogo.classList.add('animate-in');
-			splashText.classList.add('animate-in');
-		}, 100);
 
-		// 4. TRIGGER FLY AWAY
-		setTimeout(() => {
-			splashContent.classList.add('fly-away');
-		}, 3200);
+			const heroElements = document.querySelectorAll('#scene-main .hero .animate-on-scroll');
+			heroElements.forEach(el => {
+				el.style.transition = 'none';
+				el.classList.add('is-visible');
+			});
 
-		// 5. Auto transition to Main Event
-		setTimeout(() => {
-			switchScene(scenes.splash, scenes.main);
-			triggerConfetti();
+			// Instantly hide the video scene
+			scenes.start.style.transition = 'none';
+			scenes.start.classList.remove('active');
+			scenes.start.style.display = 'none';
+
+			// Fade in the main scene smoothly (0.6s instead of 0.2s)
+			scenes.main.style.transition = 'opacity 0.6s ease-in-out';
+			scenes.main.style.display = 'flex';
+			scenes.main.style.opacity = '0';
+			scenes.main.classList.add('active');
+
+			window.scrollTo(0, 0);
 			initScrollAnimations();
 
-			// --- START BACKGROUND MUSIC HERE ---
-			if (bgMusic) {
-				bgMusic.volume = 0.4; // Set to 40% volume so it's pleasant
-				bgMusic.play().catch(e => console.log("BG music autoplay blocked:", e));
-				muteBtn.classList.add('active'); // Show the mute button
-			}
+			requestAnimationFrame(() => {
+				setTimeout(() => {
+					scenes.main.style.opacity = '1';
+				}, 10);
+			});
 
-		}, 4200);
+			// Cleanup: Wait 600ms before removing inline styles
+			setTimeout(() => {
+				heroElements.forEach(el => { el.style.transition = ''; });
+				scenes.main.style.transition = '';
+				scenes.main.style.opacity = '';
+			}, 600); // Matches the 0.6s fade time
 
+		}, 200); // 200ms initial delay for the confetti burst
+	};
+
+	// 6. The High-Performance Video Monitor
+	const monitorVideo = () => {
+		if (hasTransitionedToMain || video.paused || video.ended) return;
+
+		const cutTime = 0.1; // Cuts the video 0.1s before the end
+
+		if (video.currentTime >= video.duration - cutTime) {
+			transitionToMain();
+		} else {
+			requestAnimationFrame(monitorVideo);
+		}
+	};
+
+	video.addEventListener('play', () => {
+		requestAnimationFrame(monitorVideo);
 	});
+
+	video.addEventListener('ended', transitionToMain);
 
 	// --- MUTE BUTTON LOGIC ---
 	if (muteBtn) {
@@ -245,9 +271,8 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	// ==========================================
-	// 6. COUNTDOWN TIMER & RSVP (No changes)
+	// 7. COUNTDOWN TIMER
 	// ==========================================
-	// December is month 11 (since January is 0)
 	const eventDate = new Date(2026, 11, 13, 10, 0, 0).getTime(); // Dec 13, 2026 at 10:00 AM
 
 	const updateCountdown = () => {
@@ -274,6 +299,9 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 	};
 
+	setInterval(updateCountdown, 1000);
+	updateCountdown();
+
 	// ==========================================
 	// 7. ADD TO CALENDAR (.ics) GENERATOR
 	// ==========================================
@@ -281,14 +309,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	if (calendarBtn) {
 		calendarBtn.addEventListener('click', () => {
-			// Event Details
-			const title = "Szhawn's 1st Birthday & Christening";
-			const location = "Holy Cross Parish & Hall, Valenzuela, Metro Manila";
+			// Updated Event Details
+			const title = "Szhawn's 1st Birthday and Baptism";
+			const location = "San Francisco de Assisi Parish Church & Government Center, Meycauayan, Bulacan";
 			// Format: YYYYMMDDTHHmmSS (Local time)
-			// Make sure to update these to match the actual date (Dec 13, 2026 at 10:00 AM)
-			const startTime = "20261213T100000";
-			const endTime = "20261213T140000"; // Assuming it ends at 2:00 PM
-			const description = "Join us in celebrating Szhawn's special day!";
+			const startTime = "20261213T120000"; // 12:00 PM
+			const endTime = "20261213T160000"; // Assuming 4:00 PM end time
+			const description = "Baptism at 12:00 NN at San Francisco de Assisi Parish Church (Gasak). Reception at 1:00 PM at Government Center (Saluysoy).";
 
 			// ICS File Formatting
 			const icsContent = `BEGIN:VCALENDAR
@@ -315,9 +342,9 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	setInterval(updateCountdown, 1000);
-	updateCountdown();
-
+	// ==========================================
+	// 9. RSVP FORM HANDLING
+	// ==========================================
 	const form = document.getElementById('rsvp-form');
 	if (form) {
 		form.addEventListener('submit', function (e) {

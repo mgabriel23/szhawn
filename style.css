@@ -1,4 +1,6 @@
-/* --- CSS TOKENS (Design System) --- */
+/* =========================================
+   1. CSS TOKENS (Design System)
+   ========================================= */
 :root {
 	--color-purple: #4b2c70;
 	--color-purple-dark: #321b4d;
@@ -7,6 +9,7 @@
 	--color-white: #ffffff;
 	--color-text-main: #ffffff;
 	--color-text-muted: #e6d7ff;
+	--color-brand-red: #da291c;
 
 	--font-heading: "Fredoka One", cursive;
 	--font-body: "Nunito", sans-serif;
@@ -19,7 +22,9 @@
 	--transition-speed: 0.4s;
 }
 
-/* --- RESET & BASE --- */
+/* =========================================
+   2. RESET & BASE
+   ========================================= */
 * {
 	margin: 0;
 	padding: 0;
@@ -46,13 +51,11 @@ img {
 	display: block;
 }
 
-/* Accessibility: Keyboard focus */
 :focus-visible {
 	outline: 3px solid var(--color-yellow);
 	outline-offset: 4px;
 }
 
-/* --- UTILITIES --- */
 .text-center {
 	text-align: center;
 }
@@ -60,11 +63,13 @@ img {
 	display: none !important;
 }
 
-/* --- SCENE MANAGEMENT (SPA) --- */
+/* =========================================
+   3. SCENE MANAGEMENT (SPA)
+   ========================================= */
 .scene {
-	display: none !important; /* STRICT HIDING to prevent scrolling */
+	display: none !important;
 	opacity: 0;
-	transition: opacity 0.4s ease-in-out;
+	transition: opacity var(--transition-speed) ease-in-out;
 	min-height: 100vh;
 	width: 100%;
 }
@@ -75,9 +80,136 @@ img {
 	opacity: 1;
 }
 
-/* --- SCENE 0: SLIDE TO OPEN (Curtain Reveal) --- */
+/* =========================================
+   4. SCENE 0: THE TEASER (Baby Image)
+   ========================================= */
+#scene-invite {
+	position: relative;
+	width: 100%;
+	height: 100vh;
+	height: 100dvh;
+	overflow: hidden;
+	background-color: #000;
+}
+
+#scene-invite.active {
+	display: block !important;
+}
+
+.scene2-baby-img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	opacity: 0;
+	animation: fadeInImage 2s ease-in forwards;
+	z-index: 1;
+}
+
+.invite-overlay {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	padding: 3rem 1.5rem 4rem 1.5rem;
+	z-index: 2;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 15px;
+	background: linear-gradient(
+		to top,
+		rgba(50, 27, 77, 0.95) 0%,
+		rgba(50, 27, 77, 0.6) 50%,
+		transparent 100%
+	);
+	opacity: 0;
+	transform: translateY(30px);
+	animation: slideUpOverlay 1s ease-out 1s forwards;
+}
+
+.speech-bubble {
+	position: relative;
+	background-color: var(--color-white);
+
+	/* 1. Reduced Padding */
+	padding: 12px 24px;
+	border-radius: 20px;
+
+	/* 2. Premium Border */
+	border: 3px solid var(--color-yellow);
+	box-shadow: 0 8px 20px rgba(50, 27, 77, 0.4);
+	max-width: 90%;
+	width: max-content;
+	z-index: 2;
+}
+
+/* The Tail Border (Yellow - Placed behind) */
+.speech-bubble::before {
+	content: "";
+	position: absolute;
+	bottom: -18px; /* Pushed down to match the 3px border */
+	left: 50%;
+	transform: translateX(-50%);
+	border-left: 15px solid transparent;
+	border-right: 15px solid transparent;
+	border-top: 15px solid var(--color-yellow);
+	z-index: -1;
+}
+
+/* The Tail Fill (White - Placed in front) */
+.speech-bubble::after {
+	content: "";
+	position: absolute;
+	bottom: -13px; /* Sits inside the yellow border */
+	left: 50%;
+	transform: translateX(-50%);
+	border-left: 12px solid transparent;
+	border-right: 12px solid transparent;
+	border-top: 12px solid var(--color-white);
+}
+
+/* 3. Smaller Typography */
+.invite-heading {
+	font-family: var(--font-heading);
+	color: var(--color-purple-dark);
+	font-size: clamp(1.4rem, 4vw, 1.8rem); /* Scaled down */
+	margin: 0 0 4px 0;
+	line-height: 1.2;
+}
+
+.invite-subtext {
+	font-family: var(--font-body);
+	color: #555;
+	font-size: clamp(0.85rem, 2.5vw, 1rem); /* Scaled down */
+	font-weight: 700;
+	margin: 0;
+	line-height: 1.4;
+}
+
+/* Adjust the button to connect perfectly */
+#open-invite-btn {
+	margin-top: 5px; /* Brings it closer to the bubble tail */
+	font-size: 1.1rem;
+	padding: 0.8rem 2rem;
+	opacity: 0;
+	/* The pop-up animation stays the same */
+	animation: popUpButton 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.8s
+		forwards;
+}
+
+#open-invite-btn:active {
+	transform: translateY(6px) !important;
+	box-shadow: 0 0 0 var(--color-yellow-hover);
+}
+
+/* =========================================
+   5. SCENE 1: CURTAINS & VIDEO
+   ========================================= */
 #scene-start {
-	/* Black background because the video sits here */
 	background-color: #000;
 	justify-content: center;
 	align-items: center;
@@ -91,19 +223,17 @@ img {
 	overflow: hidden;
 }
 
-/* The Video (Z-index 0, behind the curtains) */
 #intro-video {
 	position: absolute;
 	top: 0;
 	left: 0;
 	width: 100%;
 	height: 100%;
-	object-fit: cover; /* Fills screen on mobile */
+	object-fit: cover;
 	outline: none;
 	z-index: 0;
 }
 
-/* Hide native video controls */
 #intro-video::-webkit-media-controls {
 	display: none !important;
 }
@@ -114,13 +244,6 @@ img {
 	display: none !important;
 }
 
-@media (min-width: 768px) {
-	#intro-video {
-		object-fit: contain;
-	}
-}
-
-/* Curtain Container (Z-index 1, above video) */
 .curtain-container {
 	position: absolute;
 	top: 0;
@@ -129,26 +252,24 @@ img {
 	bottom: 0;
 	display: flex;
 	z-index: 1;
-	pointer-events: none; /* Lets clicks pass through to slider if needed */
+	pointer-events: none;
 }
 
-/* Base Curtain Style */
 .curtain {
 	width: 50%;
 	height: 100%;
-	background-color: var(--color-purple-dark, #321b4d);
+	background-color: var(--color-purple-dark);
 	background-image: radial-gradient(
 		circle at center,
 		#5c3a8a 0%,
-		var(--color-purple-dark, #321b4d) 100%
+		var(--color-purple-dark) 100%
 	);
 	position: relative;
-	transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Slightly slower for drama */
+	transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 	will-change: transform;
-	box-shadow: 0 0 30px rgba(0, 0, 0, 0.8); /* Stronger shadow for depth */
+	box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
 }
 
-/* Texture on curtains */
 .curtain::before {
 	content: "";
 	position: absolute;
@@ -168,7 +289,6 @@ img {
 	border-left: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-/* --- THE SLIDER TRACK (Z-index 10) --- */
 .slide-track {
 	position: absolute;
 	top: 50%;
@@ -189,61 +309,29 @@ img {
 	z-index: 10;
 }
 
-/* Track Text */
-/* Track Text */
 .track-text {
 	position: absolute;
 	right: 35px;
 	top: 50%;
 	transform: translateY(-50%);
 	color: rgba(255, 255, 255, 0.7);
-	font-family: var(--font-body, "Nunito", sans-serif);
+	font-family: var(--font-body);
 	font-size: 0.85rem;
 	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 3px;
 	pointer-events: none;
-
-	/* ADD THIS: Smooth fade transition */
 	transition: opacity 0.3s ease-in-out;
 }
 
-/* ADD THIS: The class JS will toggle */
 .track-text.hide {
 	opacity: 0;
 }
 
-/* Slide Up Impact Animation */
-.slide-track.slide-up-enter {
-	animation: slideUpImpact 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-@keyframes slideUpImpact {
-	0% {
-		transform: translate(-50%, 50vh);
-		opacity: 0;
-	}
-	60% {
-		transform: translate(-50%, -50%);
-		opacity: 1;
-	}
-	75% {
-		transform: translate(-50%, -50%) scaleX(1.08) scaleY(0.9);
-	}
-	90% {
-		transform: translate(-50%, -50%) scaleX(0.95) scaleY(1.05);
-	}
-	100% {
-		transform: translate(-50%, -50%) scale(1);
-		opacity: 1;
-	}
-}
-
-/* --- THE SLIDER THUMB --- */
 .slide-thumb {
 	width: 80px;
 	height: 60px;
-	background: var(--color-yellow, #ffc72c);
+	background: var(--color-yellow);
 	border: none;
 	border-radius: 40px;
 	display: flex;
@@ -260,44 +348,21 @@ img {
 .slide-thumb:active {
 	cursor: grabbing;
 }
-.slide-thumb:focus-visible {
-	outline: 3px solid var(--color-white);
-	outline-offset: 4px;
-}
 
 .tap-icon {
-	color: var(--color-purple-dark, #321b4d);
+	color: var(--color-purple-dark);
 	width: 28px;
 	height: 28px;
 	stroke-width: 3;
 }
 
-@keyframes breatheX {
-	0%,
-	100% {
-		transform: translateX(0);
-	}
-	50% {
-		transform: translateX(8px);
-	}
+.slide-track.slide-up-enter {
+	animation: slideUpImpact 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-/* Accessibility */
-@media (prefers-reduced-motion: reduce) {
-	.slide-track.slide-up-enter {
-		animation: none;
-		opacity: 1;
-		transform: translate(-50%, -50%);
-	}
-	.slide-thumb {
-		animation: none;
-	}
-	.curtain {
-		transition: none;
-	}
-}
-
-/* --- SCENE 3: SPLASH SCREEN --- */
+/* =========================================
+   6. SCENE 2: SPLASH SCREEN
+   ========================================= */
 #scene-splash {
 	justify-content: center;
 	align-items: center;
@@ -312,24 +377,27 @@ img {
 }
 
 .splash-content {
+	position: relative;
+	width: 100%;
+	height: 100%;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	justify-content: center;
 	gap: 15px;
 }
 
 .splash-logo {
 	width: 120px;
-	opacity: 0; /* Hidden until animation starts */
+	opacity: 0;
 }
-
 .splash-logo.animate-in {
 	animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 .splash-text {
 	font-family: var(--font-heading);
-	color: #da291c; /* McDonald's Brand Red */
+	color: var(--color-brand-red);
 	font-size: clamp(2rem, 6vw, 3rem);
 	margin: 0;
 	opacity: 0;
@@ -340,137 +408,255 @@ img {
 	animation: fadeUp 0.6s ease-out 0.3s forwards;
 }
 
-@keyframes popIn {
-	0% {
-		transform: scale(0);
-		opacity: 0;
-	}
-	100% {
-		transform: scale(1);
-		opacity: 1;
-	}
+.splash-content.fly-away {
+	animation: flyUp 1s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
 }
 
-@keyframes fadeUp {
-	0% {
-		opacity: 0;
-		transform: translateY(20px);
-	}
-	100% {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-/* --- SCENE 2: INVITE --- */
-/* --- SCENE 0: THE TEASER (Baby Image) --- */
-#scene-invite {
-	position: relative;
-	width: 100%;
-	height: 100vh;
-	height: 100dvh;
-	overflow: hidden;
-	background-color: #000;
-}
-
-#scene-invite.active {
-	display: block !important; /* Overrides the flex from .scene */
-}
-
-.invite-content h1 {
-	font-size: clamp(3rem, 10vw, 5rem);
-	color: var(--color-yellow);
-	margin-bottom: var(--spacing-sm);
-}
-
-.invite-content .subtitle {
-	font-size: clamp(1.2rem, 4vw, 1.5rem);
-	margin-bottom: var(--spacing-lg);
-}
-
-/* --- BUTTONS --- */
-.btn-primary {
-	background-color: var(--color-yellow);
-	color: var(--color-purple);
-	font-family: var(--font-heading);
-	font-size: 1.5rem;
-	padding: 1rem 2.5rem;
-	border: none;
-	border-radius: 50px;
-	cursor: pointer;
-	box-shadow: 0 6px 0 var(--color-yellow-hover);
-	transition:
-		transform 0.1s,
-		box-shadow 0.1s;
-}
-
-.btn-primary:active {
-	transform: translateY(6px);
-	box-shadow: 0 0 0 var(--color-yellow-hover);
-}
-
-/* --- SCENE 4: MAIN CONTENT --- */
+/* =========================================
+   7. MAIN CONTENT: HERO SECTION
+   ========================================= */
 #scene-main {
 	background:
 		url("https://www.transparenttextures.com/patterns/cubes.png"),
-		var(--color-purple); /* Adds a subtle texture */
+		var(--color-purple);
 	padding-bottom: var(--spacing-lg);
 }
 
 .hero {
-	text-align: center;
-	padding: var(--spacing-lg) var(--spacing-sm);
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: var(--spacing-md);
+	text-align: center;
+	padding: 3rem 1.5rem;
+	gap: 2rem;
+	width: 100%;
 }
 
-.heading {
-	color: var(--color-yellow);
-	font-size: clamp(2.5rem, 8vw, 4rem);
+.hero-text {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+}
+
+.event-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	background-color: var(--color-yellow);
+	color: var(--color-purple-dark);
+	font-family: var(--font-body);
+	font-size: 0.85rem;
+	font-weight: 900;
 	text-transform: uppercase;
 	letter-spacing: 2px;
+	padding: 8px 20px;
+	border-radius: 50px;
+	margin-bottom: 1.5rem;
+	box-shadow: 0 4px 10px rgba(255, 199, 44, 0.3);
 }
 
+.event-badge .dot {
+	font-size: 1.2rem;
+	line-height: 1;
+	color: var(--color-purple);
+}
+
+.hero-pre-title,
 .subtitle {
-	font-size: clamp(1.1rem, 3vw, 1.4rem);
+	font-family: var(--font-body);
 	color: var(--color-text-muted);
+	font-size: 0.95rem;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-weight: 700;
+	margin-bottom: 0.5rem;
 }
 
-.baby-photo {
+.hero .heading {
+	font-size: clamp(2.2rem, 8vw, 3.5rem);
+	line-height: 1.1;
+	margin-bottom: 2rem;
+	background: linear-gradient(
+		to right,
+		var(--color-yellow),
+		#fff0a8,
+		var(--color-yellow)
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	color: transparent;
+}
+
+/* Bear Avatar */
+.bear-avatar-wrapper {
+	position: relative;
+	width: 180px;
+	height: 180px;
+	margin: 30px auto 2.5rem auto;
+	z-index: 1;
+}
+
+.bear-ear {
+	position: absolute;
+	width: 70px;
+	height: 70px;
 	border-radius: 50%;
-	border: 8px solid var(--color-yellow);
-	width: 250px;
-	height: 250px;
-	object-fit: cover;
-	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+	background-color: #7b4da1;
+	border: 6px solid var(--color-white);
+	top: -20px;
+	z-index: -1;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-.event-details {
-	background: rgba(255, 255, 255, 0.1);
-	padding: var(--spacing-md);
-	border-radius: var(--border-radius);
-	backdrop-filter: blur(10px);
+.ear-left {
+	left: -10px;
+}
+.ear-right {
+	right: -10px;
+}
+
+.avatar-photo {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 6px solid var(--color-white);
+	box-shadow:
+		0 0 0 8px #7b4da1,
+		0 10px 25px rgba(0, 0, 0, 0.4);
+	position: relative;
+	z-index: 2;
+	animation: floatAvatar 4s ease-in-out infinite;
+}
+
+/* =========================================
+   8. PREMIUM DETAILS CARD
+   ========================================= */
+.premium-card {
+	background: var(--color-white);
+	border-radius: 24px;
+	padding: 24px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
 	display: flex;
 	flex-direction: column;
-	gap: var(--spacing-sm);
+	gap: 24px;
 	width: 100%;
-	max-width: 400px;
+	max-width: 420px;
+	color: var(--color-purple-dark);
+	margin: 10px auto;
+
+	/* ADD THIS LINE */
+	text-align: left;
 }
 
-.detail-item {
+.detail-row {
 	display: flex;
+	/* align-items: flex-start keeps the icon aligned with the top line of text if it wraps */
+	align-items: flex-start;
+	gap: 16px;
+}
+
+.detail-text {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+
+	/* ADD THESE TWO LINES */
+	text-align: left;
+	flex: 1; /* Ensures the text block takes up the remaining width */
+}
+
+/* Optional: Slightly push the icon down so it centers perfectly with the 3 lines of text */
+.icon-bg {
+	width: 52px;
+	height: 52px;
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-shrink: 0;
+
+	/* ADD THIS LINE */
+	margin-top: 4px;
+}
+
+.icon-purple {
+	background-color: #f3e8ff;
+	color: #9333ea;
+}
+.icon-yellow {
+	background-color: #fef08a;
+	color: #ca8a04;
+}
+
+.detail-text {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.detail-label {
+	font-family: var(--font-body);
+	font-size: 0.75rem;
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	color: #888;
+	margin-bottom: 2px;
+}
+
+.detail-main {
+	font-family: var(--font-body);
+	font-size: 1.1rem;
+	font-weight: 900;
+	line-height: 1.2;
+}
+
+.detail-sub {
+	font-family: var(--font-body);
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: #9333ea;
+}
+
+.btn-calendar {
+	background-color: var(--color-yellow);
+	color: var(--color-purple-dark);
+	border: none;
+	border-radius: 50px;
+	padding: 16px;
+	font-family: var(--font-body);
+	font-size: 1rem;
+	font-weight: 900;
+	display: flex;
+	justify-content: center;
 	align-items: center;
 	gap: 10px;
-	font-size: 1.1rem;
+	cursor: pointer;
+	transition:
+		transform 0.2s,
+		background-color 0.2s,
+		box-shadow 0.2s;
+	box-shadow: 0 4px 10px rgba(255, 199, 44, 0.3);
 }
 
+.btn-calendar:hover {
+	background-color: var(--color-yellow-hover);
+	transform: translateY(-2px);
+	box-shadow: 0 6px 15px rgba(255, 199, 44, 0.4);
+}
+
+/* =========================================
+   9. COUNTDOWN TIMER
+   ========================================= */
 .countdown-container {
 	display: flex;
 	gap: var(--spacing-sm);
 	justify-content: center;
 	flex-wrap: wrap;
+	width: 100%;
 }
 
 .count-box {
@@ -489,13 +675,16 @@ img {
 	font-weight: 900;
 	font-family: var(--font-heading);
 }
+
 .count-box small {
 	font-size: 0.8rem;
 	text-transform: uppercase;
 	font-weight: bold;
 }
 
-/* --- SECTIONS --- */
+/* =========================================
+   10. GENERAL SECTIONS & COMPONENTS
+   ========================================= */
 .section {
 	padding: var(--spacing-lg) var(--spacing-sm);
 	max-width: 800px;
@@ -505,6 +694,33 @@ img {
 .section h2 {
 	text-align: center;
 	margin-bottom: var(--spacing-md);
+}
+
+.heading {
+	color: var(--color-yellow);
+	font-size: clamp(2.5rem, 8vw, 4rem);
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}
+
+.btn-primary {
+	background-color: var(--color-yellow);
+	color: var(--color-purple);
+	font-family: var(--font-heading);
+	font-size: 1.5rem;
+	padding: 1rem 2.5rem;
+	border: none;
+	border-radius: 50px;
+	cursor: pointer;
+	box-shadow: 0 6px 0 var(--color-yellow-hover);
+	transition:
+		transform 0.1s,
+		box-shadow 0.1s;
+}
+
+.btn-primary:active {
+	transform: translateY(6px);
+	box-shadow: 0 0 0 var(--color-yellow-hover);
 }
 
 /* Timeline */
@@ -537,28 +753,239 @@ img {
 	color: var(--color-yellow);
 }
 
-/* Milestones Grid */
-.milestone-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-	gap: var(--spacing-sm);
-	margin-top: var(--spacing-md);
+/* =========================================
+   PREMIUM SCRAPBOOK MILESTONES V2
+   ========================================= */
+.milestones {
+	padding: 5rem 1rem;
+	position: relative;
+	overflow: hidden;
 }
 
+/* A subtle radial glow behind the timeline */
+.milestones::before {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 80vw;
+	height: 80vw;
+	background: radial-gradient(
+		circle,
+		rgba(75, 44, 112, 0.4) 0%,
+		transparent 70%
+	);
+	z-index: 0;
+	pointer-events: none;
+}
+
+.timeline-wrapper {
+	position: relative;
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 2rem 0;
+	z-index: 1;
+}
+
+/* The Center Dotted Line (Glowing Gradient) */
+.timeline-line {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 50%;
+	width: 4px;
+	background: linear-gradient(
+		to bottom,
+		var(--color-yellow),
+		#ff9d00,
+		var(--color-yellow)
+	);
+	background-size: 100% 40px;
+	-webkit-mask-image: linear-gradient(
+		to bottom,
+		transparent,
+		black 10%,
+		black 90%,
+		transparent
+	);
+	mask-image: linear-gradient(
+		to bottom,
+		transparent,
+		black 10%,
+		black 90%,
+		transparent
+	);
+	transform: translateX(-50%);
+	z-index: 0;
+	box-shadow: 0 0 15px rgba(255, 199, 44, 0.4);
+}
+
+/* Timeline Rows */
+.milestone-row {
+	position: relative;
+	display: flex;
+	justify-content: flex-end;
+	padding-left: 50%;
+	margin-bottom: 4rem;
+	z-index: 1;
+}
+
+.milestone-row:nth-child(even) {
+	justify-content: flex-start;
+	padding-left: 0;
+	padding-right: 50%;
+}
+
+/* The Glowing Timeline Dots */
+.timeline-dot {
+	position: absolute;
+	top: 40px; /* Aligns with the top of the photo */
+	left: 50%;
+	width: 24px;
+	height: 24px;
+	background: var(--color-purple-dark);
+	border: 4px solid var(--color-yellow);
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 5;
+	box-shadow:
+		0 0 0 5px rgba(255, 199, 44, 0.2),
+		0 0 20px var(--color-yellow);
+	transition: all 0.3s ease;
+}
+
+/* The Polaroid Card Container */
 .milestone-card {
-	background: var(--color-white);
-	color: var(--color-purple);
-	border-radius: 15px;
-	padding: 10px;
-	text-align: center;
-	font-weight: bold;
+	width: 85%;
+	max-width: 340px;
+	position: relative;
+	padding-top: 10px; /* Space for the tape */
 }
 
-.milestone-card img {
-	border-radius: 10px;
-	margin-bottom: 10px;
-	aspect-ratio: 1/1;
+/* The Washi Tape Effect */
+.tape {
+	position: absolute;
+	top: -5px;
+	left: 50%;
+	transform: translateX(-50%) rotate(-4deg);
+	width: 100px;
+	height: 30px;
+	background: rgba(255, 255, 255, 0.4);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+	border-left: 2px dashed rgba(255, 255, 255, 0.6);
+	border-right: 2px dashed rgba(255, 255, 255, 0.6);
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	z-index: 10;
+}
+
+/* The Polaroid Frame */
+.polaroid {
+	background: var(--color-white);
+	padding: 12px 12px 24px 12px;
+	border-radius: 8px;
+	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+	transform: rotate(-3deg);
+	transition:
+		transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+		box-shadow 0.4s ease;
+	position: relative;
+}
+
+.milestone-row:nth-child(even) .polaroid {
+	transform: rotate(3deg);
+}
+
+/* Hover Effect (Lifting the photo) */
+.milestone-card:hover .polaroid {
+	transform: rotate(0deg) scale(1.05) translateY(-10px);
+	box-shadow: 0 25px 50px rgba(255, 199, 44, 0.3);
+	z-index: 10;
+}
+
+.milestone-card:hover .timeline-dot {
+	background: var(--color-yellow);
+	box-shadow:
+		0 0 0 8px rgba(255, 199, 44, 0.3),
+		0 0 30px var(--color-yellow);
+}
+
+/* The Photo */
+.polaroid img {
+	width: 100%;
+	aspect-ratio: 1 / 1;
 	object-fit: cover;
+	border-radius: 4px;
+	margin-bottom: 15px;
+	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Typography */
+.polaroid-caption {
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.m-month {
+	font-family: var(--font-heading);
+	/* Premium Gradient Text */
+	background: linear-gradient(45deg, #9333ea, #4b2c70);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	font-size: 1.3rem;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+}
+
+.m-title {
+	font-family: var(--font-body);
+	color: #555;
+	font-size: 0.95rem;
+	font-weight: 800;
+}
+
+/* =========================================
+   MOBILE LAYOUT (Under 768px)
+   ========================================= */
+@media (max-width: 768px) {
+	.timeline-line {
+		left: 30px;
+		transform: none;
+	}
+
+	.milestone-row,
+	.milestone-row:nth-child(even) {
+		justify-content: flex-start;
+		padding-left: 70px;
+		padding-right: 0;
+		margin-bottom: 3rem;
+	}
+
+	.timeline-dot {
+		left: 30px;
+		top: 30px;
+	}
+
+	.milestone-card {
+		width: 100%;
+		max-width: 100%;
+	}
+
+	/* Keep slight rotation on mobile for the scrapbook feel */
+	.polaroid {
+		transform: rotate(-2deg);
+	}
+	.milestone-row:nth-child(even) .polaroid {
+		transform: rotate(2deg);
+	}
+
+	/* Tap effect instead of hover */
+	.milestone-card:active .polaroid {
+		transform: rotate(0deg) scale(0.98);
+	}
 }
 
 /* Message */
@@ -574,13 +1001,100 @@ img {
 	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Map */
-.map-container iframe {
-	border-radius: var(--border-radius);
-	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+/* =========================================
+   11. MAP SECTION
+   ========================================= */
+.map-header {
+	text-align: center;
+	margin-bottom: 2rem;
 }
 
-/* RSVP Form */
+.map-subtitle {
+	display: block;
+	color: var(--color-yellow);
+	font-family: var(--font-body);
+	font-size: 0.85rem;
+	font-weight: 800;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+	margin-bottom: 0.5rem;
+}
+
+.map-address {
+	color: var(--color-text-muted);
+	font-family: var(--font-body);
+	font-size: 1rem;
+	line-height: 1.5;
+	max-width: 90%;
+	margin: 0 auto;
+}
+
+.map-card {
+	background-color: var(--color-white);
+	padding: 10px;
+	border-radius: 30px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+	margin: 0 auto 2rem auto;
+	max-width: 600px;
+}
+
+.map-card iframe {
+	border-radius: 20px;
+	display: block;
+	width: 100%;
+}
+
+.map-actions {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	max-width: 400px;
+	margin: 0 auto;
+}
+
+.btn-map {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+	padding: 16px;
+	border-radius: 50px;
+	font-family: var(--font-body);
+	font-size: 1rem;
+	font-weight: 800;
+	text-decoration: none;
+	transition:
+		transform 0.2s,
+		box-shadow 0.2s;
+}
+
+.btn-map:hover,
+.btn-map:focus-visible {
+	transform: translateY(-3px);
+	outline: none;
+}
+
+.btn-google {
+	background-color: #9333ea;
+	color: var(--color-white);
+	box-shadow: 0 6px 15px rgba(147, 51, 234, 0.4);
+}
+.btn-google:hover {
+	background-color: #7e22ce;
+}
+
+.btn-waze {
+	background-color: var(--color-yellow);
+	color: var(--color-purple-dark);
+	box-shadow: 0 6px 15px rgba(255, 199, 44, 0.4);
+}
+.btn-waze:hover {
+	background-color: var(--color-yellow-hover);
+}
+
+/* =========================================
+   12. RSVP FORM
+   ========================================= */
 #rsvp-form {
 	background: var(--color-white);
 	padding: var(--spacing-md);
@@ -595,7 +1109,6 @@ img {
 	display: flex;
 	flex-direction: column;
 }
-
 .form-group label {
 	font-weight: bold;
 	margin-bottom: 5px;
@@ -609,6 +1122,7 @@ img {
 	font-family: var(--font-body);
 	font-size: 1rem;
 }
+
 .form-group input:focus,
 .form-group select:focus {
 	border-color: var(--color-purple);
@@ -620,6 +1134,9 @@ img {
 	width: 100%;
 }
 
+/* =========================================
+   13. FOOTER & MUTE BUTTON
+   ========================================= */
 footer {
 	text-align: center;
 	padding: var(--spacing-md);
@@ -629,275 +1146,11 @@ footer {
 	margin-top: var(--spacing-lg);
 }
 
-/* --- ANIMATIONS --- */
-@keyframes pulse {
-	0% {
-		transform: scale(1);
-	}
-	100% {
-		transform: scale(1.1);
-	}
-}
-
-/* Scroll Reveal Animation classes */
-.animate-on-scroll {
-	opacity: 0;
-	transform: translateY(30px);
-	transition:
-		opacity 0.6s ease-out,
-		transform 0.6s ease-out;
-}
-
-.animate-on-scroll.is-visible {
-	opacity: 1;
-	transform: translateY(0);
-}
-
-/* Respect user's motion preferences */
-@media (prefers-reduced-motion: reduce) {
-	.animate-on-scroll {
-		opacity: 1;
-		transform: none;
-		transition: none;
-	}
-	.splash-logo {
-		animation: none;
-	}
-}
-
-/* --- DESKTOP / LARGE SCREENS --- */
-@media (min-width: 768px) {
-	.hero {
-		flex-direction: row;
-		justify-content: center;
-		flex-wrap: wrap;
-		text-align: left;
-	}
-
-	.hero-text {
-		flex: 1;
-		min-width: 300px;
-		text-align: left;
-	}
-	.hero-image {
-		flex: 0 0 auto;
-	}
-	.event-details {
-		flex: 1;
-		min-width: 300px;
-	}
-
-	.countdown-container {
-		width: 100%;
-		margin-top: var(--spacing-md);
-	}
-
-	.timeline {
-		margin-left: auto;
-		margin-right: auto;
-		width: 80%;
-	}
-}
-
-/* --- SCENE 2: BABY IMAGE REVEAL & OVERLAY --- */
-
-/* The scene acts as the background container */
-#scene-invite {
-	position: relative;
-	width: 100%;
-	height: 100vh;
-	height: 100dvh; /* Accounts for mobile browser bars */
-	overflow: hidden;
-	background-color: #000;
-	display: block; /* Overriding the flex from .scene */
-}
-
-/* The Full-Screen Image */
-.scene2-baby-img {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	object-fit: cover; /* Fills the screen on mobile */
-
-	/* The Fade-in Animation */
-	opacity: 0;
-	animation: fadeInImage 2s ease-in forwards;
-	z-index: 1;
-}
-
-@keyframes fadeInImage {
-	0% {
-		opacity: 0;
-		transform: scale(1.05);
-	}
-	100% {
-		opacity: 1;
-		transform: scale(1);
-	}
-}
-
-/* The Overlay Container */
-.invite-overlay {
-	position: absolute;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	padding: 3rem 1.5rem 4rem 1.5rem;
-	z-index: 2;
-
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	text-align: center;
-	gap: 12px;
-
-	/* The Gradient: Solid purple at the bottom fading to transparent */
-	background: linear-gradient(
-		to top,
-		rgba(50, 27, 77, 0.95) 0%,
-		rgba(50, 27, 77, 0.6) 50%,
-		transparent 100%
-	);
-
-	/* Slide up animation for the text */
-	opacity: 0;
-	transform: translateY(30px);
-	animation: slideUpOverlay 1s ease-out 1s forwards; /* Starts 1s after image begins fading in */
-}
-
-@keyframes slideUpOverlay {
-	to {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-/* Typography */
-.invite-heading {
-	font-family: var(--font-heading);
-	color: var(--color-yellow);
-	font-size: clamp(2rem, 6vw, 3rem);
-	margin: 0;
-	text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-}
-
-.invite-subtext {
-	font-family: var(--font-body);
-	color: var(--color-white);
-	font-size: clamp(1.1rem, 4vw, 1.3rem);
-	font-weight: 700;
-	margin: 0 0 10px 0;
-	text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-}
-
-/* Ensure the button looks great on top of the image */
-#open-invite-btn {
-	margin-top: 15px;
-
-	/* 1. Make it smaller */
-	font-size: 1.1rem;
-	padding: 0.8rem 2rem;
-
-	/* 2. Hide it initially for the fly-up animation */
-	opacity: 0;
-
-	/* 3. Trigger the pop-up animation after 1.8 seconds */
-	animation: popUpButton 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.8s
-		forwards;
-}
-
-/* The Fly-Up/Pop-In Animation */
-@keyframes popUpButton {
-	0% {
-		opacity: 0;
-		/* Starts 100px below its actual position */
-		transform: translateY(100px);
-	}
-	100% {
-		opacity: 1;
-		transform: translateY(0);
-	}
-}
-
-/* Ensure the active click state still works perfectly */
-#open-invite-btn:active {
-	transform: translateY(6px) !important;
-	box-shadow: 0 0 0 var(--color-yellow-hover);
-}
-
-/* Accessibility: Respect users who prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-	#open-invite-btn {
-		animation: none;
-		opacity: 1;
-	}
-}
-
-/* Desktop adjustment: show a bit more of the image without extreme cropping */
-@media (min-width: 768px) {
-	.scene2-baby-img {
-		object-fit: contain; /* Shows the whole photo on large screens */
-		background-color: var(--color-purple-dark); /* Fills empty sides */
-	}
-
-	.invite-overlay {
-		background: linear-gradient(
-			to top,
-			rgba(50, 27, 77, 0.9) 0%,
-			rgba(50, 27, 77, 0.4) 40%,
-			transparent 80%
-		);
-	}
-}
-
-/* Accessibility: Respect reduced motion */
-@media (prefers-reduced-motion: reduce) {
-	.scene2-baby-img,
-	.invite-overlay {
-		animation: none;
-		opacity: 1;
-		transform: none;
-	}
-}
-
-/* --- SPLASH SCREEN FLY UP EXIT --- */
-.splash-content.fly-away {
-	/* Accelerates upwards using a smooth ease-in curve */
-	animation: flyUp 1s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
-}
-
-@keyframes flyUp {
-	0% {
-		transform: translateY(0);
-		opacity: 1;
-	}
-	100% {
-		transform: translateY(-150vh); /* Flies completely off screen */
-		opacity: 0;
-	}
-}
-
-/* Accessibility: Respect users who prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-	.splash-content.fly-away {
-		animation: fadeOut 0.5s ease-out forwards;
-	}
-	@keyframes fadeOut {
-		to {
-			opacity: 0;
-		}
-	}
-}
-
-/* --- FLOATING MUTE BUTTON --- */
 .mute-btn {
 	position: fixed !important;
 	bottom: 24px !important;
 	right: 24px !important;
-	z-index: 2147483647 !important; /* Maximum possible z-index */
-
+	z-index: 2147483647 !important;
 	background: rgba(50, 27, 77, 0.85);
 	border: 2px solid var(--color-yellow);
 	border-radius: 50%;
@@ -906,8 +1159,7 @@ footer {
 	font-size: 1.3rem;
 	color: var(--color-white);
 	cursor: pointer;
-
-	display: none; /* Hidden by default */
+	display: none;
 	justify-content: center;
 	align-items: center;
 	backdrop-filter: blur(10px);
@@ -921,7 +1173,6 @@ footer {
 .mute-btn.active {
 	display: flex !important;
 }
-
 .mute-btn:hover,
 .mute-btn:focus-visible {
 	transform: scale(1.1);
@@ -929,166 +1180,87 @@ footer {
 	outline: none;
 }
 
-/* --- PREMIUM DETAILS CARD --- */
-.premium-card {
-	background: var(--color-white);
-	border-radius: 24px;
-	padding: 24px;
-	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-	display: flex;
-	flex-direction: column;
-	gap: 24px;
-	width: 100%;
-	max-width: 420px;
-	color: var(--color-purple-dark);
-	/* Slight margin to separate from the text above */
-	margin: 10px auto;
-}
-
-/* The Row (Icon + Text) */
-.detail-row {
-	display: flex;
-	align-items: center;
-	gap: 16px;
-}
-
-/* The Icon Backgrounds */
-.icon-bg {
-	width: 52px;
-	height: 52px;
-	border-radius: 50%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	flex-shrink: 0;
-}
-
-.icon-purple {
-	background-color: #f3e8ff; /* Soft purple */
-	color: #9333ea; /* Bold purple */
-}
-
-.icon-yellow {
-	background-color: #fef08a; /* Soft yellow */
-	color: #ca8a04; /* Darker yellow/gold */
-}
-
-/* Text Styling */
-.detail-text {
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
-}
-
-.detail-label {
-	font-family: var(--font-body);
-	font-size: 0.75rem;
-	font-weight: 800;
-	text-transform: uppercase;
-	letter-spacing: 1px;
-	color: #888;
-	margin-bottom: 2px;
-}
-
-.detail-main {
-	font-family: var(--font-body);
-	font-size: 1.1rem;
-	font-weight: 900;
-	line-height: 1.2;
-}
-
-.detail-sub {
-	font-family: var(--font-body);
-	font-size: 0.9rem;
-	font-weight: 700;
-	color: #9333ea; /* Purple for time/location sub-text */
-}
-
-/* The Calendar Button */
-.btn-calendar {
-	background-color: var(--color-yellow);
-	color: var(--color-purple-dark);
-	border: none;
-	border-radius: 50px;
-	padding: 16px;
-	font-family: var(--font-body);
-	font-size: 1rem;
-	font-weight: 900;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 10px;
-	cursor: pointer;
+/* =========================================
+   14. ANIMATIONS
+   ========================================= */
+.animate-on-scroll {
+	opacity: 0;
+	transform: translateY(30px);
 	transition:
-		transform 0.2s,
-		background-color 0.2s,
-		box-shadow 0.2s;
-	box-shadow: 0 4px 10px rgba(255, 199, 44, 0.3);
+		opacity 0.6s ease-out,
+		transform 0.6s ease-out;
 }
 
-.btn-calendar:hover {
-	background-color: var(--color-yellow-hover);
-	transform: translateY(-2px);
-	box-shadow: 0 6px 15px rgba(255, 199, 44, 0.4);
-}
-
-.btn-calendar:active {
+.animate-on-scroll.is-visible {
+	opacity: 1;
 	transform: translateY(0);
 }
 
-/* --- PREMIUM BEAR AVATAR --- */
-.bear-avatar-wrapper {
-	position: relative;
-	width: 180px;
-	height: 180px;
-	margin: 0 auto 2.5rem auto; /* Centered with good bottom spacing */
-	margin-top: 30px; /* Extra space on top for the ears */
-	z-index: 1;
+@keyframes fadeInImage {
+	0% {
+		opacity: 0;
+		transform: scale(1.05);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
 }
-
-/* The Ears */
-.bear-ear {
-	position: absolute;
-	width: 70px;
-	height: 70px;
-	border-radius: 50%;
-	background-color: #7b4da1; /* Mid-purple to match the image */
-	border: 6px solid var(--color-white);
-	top: -20px; /* Pushed up */
-	z-index: -1; /* Tucked behind the main photo */
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+@keyframes slideUpOverlay {
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
-
-.ear-left {
-	left: -10px;
+@keyframes popUpButton {
+	0% {
+		opacity: 0;
+		transform: translateY(100px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }
-
-.ear-right {
-	right: -10px;
+@keyframes breatheX {
+	0%,
+	100% {
+		transform: translateX(0);
+	}
+	50% {
+		transform: translateX(8px);
+	}
 }
-
-/* The Main Photo */
-.avatar-photo {
-	width: 100%;
-	height: 100%;
-	border-radius: 50%;
-	object-fit: cover;
-
-	/* The White Inner Border */
-	border: 6px solid var(--color-white);
-
-	/* The Purple Outer Ring + Drop Shadow */
-	box-shadow:
-		0 0 0 8px #7b4da1,
-		0 10px 25px rgba(0, 0, 0, 0.4);
-
-	position: relative;
-	z-index: 2;
-
-	/* Keep the smooth floating animation */
-	animation: floatAvatar 4s ease-in-out infinite;
+@keyframes popIn {
+	0% {
+		transform: scale(0);
+		opacity: 0;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
 }
-
+@keyframes fadeUp {
+	0% {
+		opacity: 0;
+		transform: translateY(20px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+@keyframes flyUp {
+	0% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+	100% {
+		transform: translateY(-150vh);
+		opacity: 0;
+	}
+}
 @keyframes floatAvatar {
 	0%,
 	100% {
@@ -1098,64 +1270,120 @@ footer {
 		transform: translateY(-10px);
 	}
 }
-
-/* Mobile Responsiveness */
-@media (max-width: 400px) {
-	.bear-avatar-wrapper {
-		width: 150px;
-		height: 150px;
+@keyframes slideUpImpact {
+	0% {
+		transform: translate(-50%, 50vh);
+		opacity: 0;
 	}
-	.bear-ear {
-		width: 55px;
-		height: 55px;
-		top: -15px;
+	60% {
+		transform: translate(-50%, -50%);
+		opacity: 1;
 	}
-	.avatar-photo {
-		border: 5px solid var(--color-white);
-		box-shadow:
-			0 0 0 6px #7b4da1,
-			0 10px 25px rgba(0, 0, 0, 0.4);
+	75% {
+		transform: translate(-50%, -50%) scaleX(1.08) scaleY(0.9);
+	}
+	90% {
+		transform: translate(-50%, -50%) scaleX(0.95) scaleY(1.05);
+	}
+	100% {
+		transform: translate(-50%, -50%) scale(1);
+		opacity: 1;
 	}
 }
 
 /* =========================================
-   ULTRA-SMALL SCREENS (320px - 400px)
+   15. DESKTOP / LARGE SCREENS
    ========================================= */
-@media (max-width: 400px) {
-	/* 1. Reduce overall Hero spacing */
+@media (min-width: 900px) {
 	.hero {
-		padding: 2rem 1rem; /* Less padding for tiny screens */
-		gap: 1.5rem;
+		display: grid;
+		grid-template-columns: 1.1fr 0.9fr;
+		grid-template-areas:
+			"text card"
+			"avatar card"
+			"countdown countdown";
+		gap: 1rem 5rem;
+		align-items: center;
+		text-align: left;
+		max-width: 1100px;
+		margin: 0 auto;
+		padding: 5rem 2rem;
 	}
 
-	/* 2. Scale down the Badge */
+	.hero-text {
+		grid-area: text;
+		align-items: flex-start;
+		text-align: left;
+	}
+
+	.bear-avatar-wrapper {
+		grid-area: avatar;
+		justify-self: flex-start;
+		margin: 0;
+		margin-top: 1rem;
+	}
+
+	.premium-card {
+		grid-area: card;
+		margin: 0;
+		max-width: 100%;
+		justify-self: end;
+		transition: transform 0.3s ease;
+	}
+
+	.premium-card:hover {
+		transform: translateY(-5px);
+	}
+	.countdown-container {
+		grid-area: countdown;
+		justify-content: center;
+		margin-top: 3rem;
+	}
+
+	.hero .heading {
+		font-size: 4rem;
+		margin-bottom: 1.5rem;
+	}
+	.hero-pre-title,
+	.subtitle {
+		font-size: 1rem;
+		letter-spacing: 3px;
+	}
+
+	.timeline {
+		margin-left: auto;
+		margin-right: auto;
+		width: 80%;
+	}
+	#intro-video {
+		object-fit: contain;
+	}
+}
+
+/* =========================================
+   16. ULTRA-SMALL SCREENS (320px - 400px)
+   ========================================= */
+@media (max-width: 400px) {
 	.event-badge {
-		font-size: 0.65rem; /* Smaller text */
+		font-size: 0.65rem;
 		padding: 6px 12px;
 		letter-spacing: 1px;
-		gap: 4px;
 		margin-bottom: 1rem;
 	}
 	.event-badge .dot {
 		font-size: 1rem;
 	}
-
-	/* 3. Scale down the Pre-title */
-	.hero-pre-title {
+	.hero-pre-title,
+	.subtitle {
 		font-size: 0.75rem;
 		letter-spacing: 1.5px;
 		margin-bottom: 0.5rem;
 	}
-
-	/* 4. Scale down the Main Name Heading */
 	.hero .heading {
-		/* Override the clamp minimum (2.5rem) to prevent overflow */
 		font-size: 2rem;
-		line-height: 1.1;
 		margin-bottom: 1.5rem;
 	}
 
-	/* 5. Scale down the Bear Avatar */
 	.bear-avatar-wrapper {
 		width: 130px;
 		height: 130px;
@@ -1174,34 +1402,31 @@ footer {
 	.ear-right {
 		right: -5px;
 	}
-
 	.avatar-photo {
 		border: 4px solid var(--color-white);
-		/* Scale down the purple outer ring shadow */
 		box-shadow:
 			0 0 0 5px #7b4da1,
 			0 8px 20px rgba(0, 0, 0, 0.4);
 	}
 
-	/* 6. Adjust the Premium Details Card */
 	.premium-card {
-		padding: 16px; /* Reduce padding from 24px */
+		padding: 16px;
 		gap: 16px;
 		border-radius: 16px;
 	}
 	.detail-row {
-		gap: 12px; /* Less gap between icon and text */
+		gap: 12px;
 	}
 	.icon-bg {
 		width: 44px;
-		height: 44px; /* Slightly smaller icons */
+		height: 44px;
 	}
 	.icon-bg svg {
 		width: 20px;
 		height: 20px;
 	}
 	.detail-main {
-		font-size: 1rem; /* Slightly smaller main text */
+		font-size: 1rem;
 	}
 	.detail-sub {
 		font-size: 0.8rem;
@@ -1211,12 +1436,11 @@ footer {
 		font-size: 0.9rem;
 	}
 
-	/* 7. Adjust the Countdown Boxes so 4 fit in a row */
 	.countdown-container {
-		gap: 8px; /* Tighter gap */
+		gap: 8px;
 	}
 	.count-box {
-		min-width: 60px; /* Smaller boxes */
+		min-width: 60px;
 		padding: 10px 5px;
 	}
 	.count-box span {
@@ -1224,5 +1448,676 @@ footer {
 	}
 	.count-box small {
 		font-size: 0.65rem;
+	}
+
+	.map-address {
+		font-size: 0.9rem;
+	}
+	.map-card {
+		padding: 8px;
+		border-radius: 20px;
+	}
+	.map-card iframe {
+		border-radius: 14px;
+	}
+	.btn-map {
+		font-size: 0.9rem;
+		padding: 14px;
+	}
+}
+
+/* =========================================
+   17. ACCESSIBILITY (Reduced Motion)
+   ========================================= */
+@media (prefers-reduced-motion: reduce) {
+	.animate-on-scroll {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+	.slide-track.slide-up-enter {
+		animation: none;
+		opacity: 1;
+		transform: translate(-50%, -50%);
+	}
+	.slide-thumb {
+		animation: none;
+	}
+	.curtain {
+		transition: none;
+	}
+	.scene2-baby-img,
+	.invite-overlay {
+		animation: none;
+		opacity: 1;
+		transform: none;
+	}
+	.splash-content.fly-away {
+		animation: fadeOut 0.5s ease-out forwards;
+	}
+	.splash-logo,
+	.splash-text {
+		animation: none !important;
+		opacity: 1 !important;
+		transform: none !important;
+	}
+	.avatar-photo {
+		animation: none;
+	}
+	@keyframes fadeOut {
+		to {
+			opacity: 0;
+		}
+	}
+}
+
+/* Forces a scene to disappear instantly with no fade */
+.instant-hide {
+	display: none !important;
+	opacity: 0 !important;
+	transition: none !important;
+}
+
+/* =========================================
+   PREMIUM SCRAPBOOK MILESTONES
+   ========================================= */
+.milestones {
+	padding: 4rem 1rem;
+	background-color: rgba(50, 27, 77, 0.5); /* Slight contrast from main bg */
+	border-radius: 40px;
+	margin-bottom: 4rem;
+}
+
+.timeline-wrapper {
+	position: relative;
+	max-width: 900px;
+	margin: 0 auto;
+	padding: 2rem 0;
+}
+
+/* The Center Dotted Line (Desktop) */
+.timeline-line {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 50%;
+	width: 4px;
+	background-image: linear-gradient(
+		to bottom,
+		var(--color-yellow) 50%,
+		transparent 50%
+	);
+	background-size: 4px 20px;
+	transform: translateX(-50%);
+	z-index: 0;
+}
+
+.milestone-row {
+	position: relative;
+	display: flex;
+	justify-content: flex-end;
+	padding-left: 50%;
+	margin-bottom: 3rem;
+	z-index: 1;
+}
+
+/* Alternating Layout */
+.milestone-row:nth-child(even) {
+	justify-content: flex-start;
+	padding-left: 0;
+	padding-right: 50%;
+}
+
+.milestone-card {
+	width: 80%;
+	max-width: 320px;
+}
+
+/* The Polaroid Effect */
+.polaroid {
+	background: var(--color-white);
+	padding: 12px 12px 20px 12px;
+	border-radius: 8px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+	transform: rotate(-3deg);
+	transition:
+		transform 0.3s ease,
+		box-shadow 0.3s ease;
+	position: relative;
+}
+
+.milestone-row:nth-child(even) .polaroid {
+	transform: rotate(3deg);
+}
+
+/* Hover effect for desktop */
+.polaroid:hover {
+	transform: rotate(0deg) scale(1.05);
+	box-shadow: 0 15px 40px rgba(255, 199, 44, 0.3);
+	z-index: 10;
+}
+
+/* The Photo */
+.polaroid img {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	border-radius: 4px;
+	margin-bottom: 15px;
+}
+
+/* The Caption */
+.polaroid-caption {
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.m-month {
+	font-family: var(--font-heading);
+	color: #9333ea; /* Theme Purple */
+	font-size: 1.2rem;
+	text-transform: uppercase;
+}
+
+.m-title {
+	font-family: var(--font-body);
+	color: #555;
+	font-size: 0.95rem;
+	font-weight: 800;
+}
+
+/* The Dotted Connector Dots */
+.milestone-row::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 20px;
+	height: 20px;
+	background: var(--color-yellow);
+	border: 4px solid var(--color-purple-dark);
+	border-radius: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 2;
+	box-shadow: 0 0 10px rgba(255, 199, 44, 0.5);
+}
+
+/* Decorative Stars (CSS Only) */
+.timeline-wrapper::before,
+.timeline-wrapper::after {
+	content: "★";
+	position: absolute;
+	color: var(--color-yellow);
+	font-size: 2rem;
+	opacity: 0.3;
+}
+.timeline-wrapper::before {
+	top: 10%;
+	left: 10%;
+}
+.timeline-wrapper::after {
+	bottom: 10%;
+	right: 10%;
+}
+
+/* =========================================
+   MOBILE LAYOUT (Under 768px)
+   ========================================= */
+@media (max-width: 768px) {
+	.timeline-line {
+		left: 20px; /* Moves line to the left */
+		transform: none;
+	}
+
+	.milestone-row,
+	.milestone-row:nth-child(even) {
+		justify-content: flex-start;
+		padding-left: 50px; /* Space for the line */
+		padding-right: 0;
+		margin-bottom: 2.5rem;
+	}
+
+	.milestone-row::after {
+		left: 20px; /* Aligns dot with the line */
+	}
+
+	.milestone-card {
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.polaroid,
+	.milestone-row:nth-child(even) .polaroid {
+		transform: rotate(
+			0deg
+		); /* Remove rotation on mobile for cleaner look */
+	}
+
+	.polaroid:hover {
+		transform: scale(1.02); /* Simpler hover for touch devices */
+	}
+}
+
+/* =========================================
+   PREMIUM VENUE DETAILS LAYOUT
+   ========================================= */
+.venue-details-grid {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1.5rem;
+	max-width: 500px;
+	margin: 0 auto;
+	padding: 0 1rem;
+}
+
+.venue-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 8px;
+	width: 100%;
+}
+
+/* The Tag and Time Container */
+.venue-time-box {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	margin-bottom: 4px;
+}
+
+/* The small yellow label (BAPTISM / RECEPTION) */
+.v-tag {
+	font-family: var(--font-body);
+	font-size: 0.75rem;
+	font-weight: 900;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+	color: var(--color-yellow);
+}
+
+/* The Time (12:00 NN) */
+.v-time {
+	font-family: var(--font-heading);
+	font-size: 1.3rem;
+	color: var(--color-white);
+	line-height: 1;
+}
+
+/* The Venue Name */
+.v-name {
+	font-family: var(--font-body);
+	font-size: 1.1rem;
+	font-weight: 900;
+	color: var(--color-white);
+	margin: 0;
+	line-height: 1.3;
+}
+
+/* The Address */
+.v-address {
+	font-family: var(--font-body);
+	font-size: 0.9rem;
+	font-weight: 600;
+	color: var(--color-text-muted);
+	margin: 0;
+}
+
+/* Subtle Divider Line between the two venues */
+.venue-divider {
+	width: 60%;
+	height: 1px;
+	background: linear-gradient(
+		to right,
+		transparent,
+		rgba(255, 255, 255, 0.2),
+		transparent
+	);
+	margin: 0.5rem 0;
+}
+
+/* =========================================
+   RESPONSIVE ADJUSTMENTS (320px - 400px)
+   ========================================= */
+@media (max-width: 400px) {
+	.venue-details-grid {
+		gap: 1.2rem;
+		padding: 0 0.5rem;
+	}
+	.v-name {
+		font-size: 1rem;
+	}
+	.v-address {
+		font-size: 0.85rem;
+	}
+	.v-time {
+		font-size: 1.2rem;
+	}
+	.v-tag {
+		font-size: 0.65rem;
+	}
+}
+
+/* =========================================
+   PREMIUM CARD REFINEMENTS
+   ========================================= */
+
+/* Grouping the times */
+.time-group {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin-top: 4px;
+}
+
+.time-note {
+	font-size: 0.8rem;
+	color: #888;
+	font-weight: 600;
+}
+
+/* Grouping locations */
+.location-group {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin-top: 4px;
+}
+
+/* Subtle line between the two venues */
+.location-divider {
+	width: 100%;
+	height: 1px;
+	background-color: #eee;
+	margin: 10px 0;
+}
+
+/* =========================================
+   ULTRA-SMALL SCREENS (320px - 400px) FIX
+   ========================================= */
+@media (max-width: 400px) {
+	.premium-card {
+		/* 1. Reduce padding to give text more breathing room */
+		padding: 16px;
+		gap: 16px;
+	}
+
+	.detail-row {
+		/* 2. Reduce the gap between the icon and text */
+		gap: 12px;
+		align-items: flex-start; /* Keep icon at the top if text wraps */
+	}
+
+	.icon-bg {
+		/* 3. Make icons slightly smaller so text has more width */
+		width: 40px;
+		height: 40px;
+		margin-top: 2px;
+	}
+
+	.icon-bg svg {
+		width: 18px;
+		height: 18px;
+	}
+
+	/* 4. Tweak Font Sizes specifically for 320px screens */
+	.detail-label {
+		font-size: 0.7rem;
+	}
+	.detail-main {
+		font-size: 0.95rem;
+	}
+	.detail-sub {
+		font-size: 0.8rem;
+	}
+	.time-note {
+		font-size: 0.75rem;
+	}
+
+	/* Button adjustment */
+	.btn-calendar {
+		padding: 12px;
+		font-size: 0.9rem;
+	}
+}
+
+/* =========================================
+   PREMIUM GIFT IDEAS SECTION (V3 - Clean)
+   ========================================= */
+.gifts-section {
+	padding: var(--spacing-lg) var(--spacing-sm);
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+.gift-header {
+	text-align: center;
+	margin-bottom: 3.5rem;
+	max-width: 650px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.gift-phrase {
+	font-family: var(--font-body);
+	color: var(--color-text-muted);
+	font-size: 1.05rem;
+	line-height: 1.7;
+	font-style: italic;
+	margin-top: 1rem;
+	font-weight: 600;
+}
+
+/* The Grid Layout */
+.gift-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr); /* Forces exactly 3 equal columns */
+	gap: 1rem;
+	width: 100%;
+	max-width: 800px;
+	margin: 0 auto;
+	align-items: start; /* Aligns the tops of the items */
+}
+
+/* Individual Items */
+.gift-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	padding: 1rem 0.5rem;
+	transition: transform 0.3s ease;
+	/* Ensure content starts from the top */
+	justify-content: flex-start;
+}
+
+.gift-item:hover {
+	transform: translateY(-5px);
+}
+
+/* Typography */
+.gift-title {
+	font-family: var(--font-heading);
+	background: linear-gradient(
+		to right,
+		#ffffff,
+		var(--color-yellow),
+		#ffffff
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	color: transparent;
+	font-size: 1.2rem;
+	margin: 0;
+	line-height: 1.3;
+	padding: 0 4px;
+	text-align: center;
+
+	/* THE FIX: Reserve space for 2 lines of text */
+	min-height: 2.6rem;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+}
+
+/* Glowing Icon Base */
+.gift-icon-bg {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	background: linear-gradient(
+		135deg,
+		rgba(255, 255, 255, 0.1),
+		rgba(255, 255, 255, 0.02)
+	);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 1.5rem;
+	color: var(--color-yellow);
+	/* Soft Glow effect */
+	box-shadow:
+		0 10px 25px rgba(0, 0, 0, 0.2),
+		inset 0 0 15px rgba(255, 199, 44, 0.1);
+	transition: all 0.3s ease;
+}
+
+.gift-item:hover .gift-icon-bg {
+	background: var(--color-yellow);
+	color: var(--color-purple-dark);
+	box-shadow: 0 15px 35px rgba(255, 199, 44, 0.4);
+}
+
+/* =========================================
+   ULTRA-SMALL SCREENS (320px - 400px)
+   ========================================= */
+@media (max-width: 400px) {
+	.gift-phrase {
+		font-size: 0.95rem;
+	}
+
+	.gift-item {
+		padding: 0.5rem 0;
+	}
+
+	.gift-icon-bg {
+		width: 55px;
+		height: 55px;
+		margin-bottom: 1rem;
+	}
+
+	.gift-icon-bg svg {
+		width: 24px;
+		height: 24px;
+	}
+
+	.gift-title {
+		font-size: 0.8rem;
+		line-height: 1.2;
+		min-height: 2.2rem; /* Adjusted for mobile font size */
+	}
+}
+
+/* Vertical Dividers (Desktop only) */
+.gift-divider {
+	width: 1px;
+	height: 100px;
+	background: linear-gradient(
+		to bottom,
+		transparent,
+		rgba(255, 255, 255, 0.2),
+		transparent
+	);
+}
+
+/* =========================================
+   ULTRA-SMALL SCREENS (320px - 400px)
+   ========================================= */
+@media (max-width: 768px) {
+	/* Hide dividers on mobile to save space */
+	.gift-divider {
+		display: none;
+	}
+
+	.gift-grid {
+		gap: 0.5rem;
+	}
+}
+
+/* =========================================
+   DRESS CODE SECTION
+   ========================================= */
+.dress-code-section {
+	padding: var(--spacing-lg) var(--spacing-sm);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.dress-code-content {
+	/* A soft, premium gradient container */
+	background: radial-gradient(
+		circle at top,
+		rgba(255, 255, 255, 0.05) 0%,
+		transparent 70%
+	);
+	border-radius: var(--border-radius);
+	padding: 3rem 2rem;
+	text-align: center;
+	max-width: 500px;
+	width: 100%;
+	transition: transform 0.3s ease;
+}
+
+.dress-code-content:hover {
+	transform: translateY(-5px);
+}
+
+.dress-icon-wrapper {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	background: rgba(255, 199, 44, 0.1);
+	color: var(--color-yellow);
+	margin-bottom: 1.5rem;
+	/* Soft glow effect */
+	box-shadow: 0 0 20px rgba(255, 199, 44, 0.15);
+}
+
+.dress-text {
+	font-family: var(--font-body);
+	color: var(--color-white);
+	font-size: 1.1rem;
+	line-height: 1.6;
+	font-weight: 600;
+	margin: 0;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 400px) {
+	.dress-code-content {
+		padding: 2rem 1rem;
+	}
+	.dress-icon-wrapper {
+		width: 60px;
+		height: 60px;
+		margin-bottom: 1rem;
+	}
+	.dress-icon-wrapper svg {
+		width: 30px;
+		height: 30px;
+	}
+	.dress-text {
+		font-size: 1rem;
 	}
 }
