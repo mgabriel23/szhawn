@@ -723,32 +723,70 @@
 			</section>
 
 			<!-- Message from Parents -->
-			<section class="section message">
-				<h2 class="heading animate-on-scroll">
-					A Message from Mommy & Daddy
-				</h2>
-				<blockquote class="animate-on-scroll">
-					"Our little Szhawn has brought so much joy into our lives.
-					We can't wait to celebrate his first year and his baptism
-					with you!"
-				</blockquote>
+			<section class="section message-section">
+				<div class="message-header animate-on-scroll">
+					<span class="message-subtitle">With Love</span>
+					<h2 class="heading" style="margin-bottom: 0">
+						A Message From<br />Mommy & Daddy
+					</h2>
+				</div>
+
+				<div class="premium-message-card animate-on-scroll">
+					<!-- Decorative Quote Mark -->
+					<div class="quote-icon">
+						<svg
+							width="60"
+							height="60"
+							viewBox="0 0 24 24"
+							fill="var(--color-yellow)"
+							xmlns="http://www.w3.org/2000/svg"
+						>
+							<path
+								d="M10 11H6.5C6.5 8.5 8.5 7.5 10 7.5V5C6 5 4 8 4 11V19H10V11ZM20 11H16.5C16.5 8.5 18.5 7.5 20 7.5V5C16 5 14 8 14 11V19H20V11Z"
+							/>
+						</svg>
+					</div>
+
+					<div class="message-content">
+						<p class="message-text">
+							"From the very moment you came into our lives, our
+							world became brighter, sweeter, and filled with
+							endless love. Watching you grow, giggle, and reach
+							your milestones over this past year has been our
+							greatest joy."
+						</p>
+						<p class="message-text">
+							"As our little bear
+							<span class="highlight-name">Szhawn Marq</span>
+							turns one and receives God's holy blessing in
+							baptism, we pray for a lifetime of good health,
+							boundless happiness, and loving guidance. We would
+							be so honored to share this blessed celebration with
+							all the family and friends who mean so much to us!"
+						</p>
+					</div>
+				</div>
 			</section>
 
 			<!-- RSVP Form -->
 			<section class="section rsvp">
-				<h2 class="heading animate-on-scroll">RSVP</h2>
-				<p class="text-center animate-on-scroll">
-					Please let us know if you can make it by Oct 15.
-				</p>
+				<div class="rsvp-header animate-on-scroll">
+					<span class="rsvp-subtitle">Respond to Invitation</span>
+					<h2 class="heading" style="margin-bottom: 0.5rem">RSVP</h2>
+					<div class="rsvp-dots">
+						<span></span><span></span><span></span>
+					</div>
+					<p class="rsvp-desc">
+						Please confirm your attendance by November 30, 2026.
+					</p>
+				</div>
 
-				<!-- Using Web3Forms for free emailing -->
 				<form
 					id="rsvp-form"
 					class="animate-on-scroll"
 					action="https://api.web3forms.com/submit"
 					method="POST"
 				>
-					<!-- Get your free access key from web3forms.com and paste it here -->
 					<input
 						type="hidden"
 						name="access_key"
@@ -766,44 +804,183 @@
 						style="display: none"
 					/>
 
+					<!-- Name -->
 					<div class="form-group">
-						<label for="name">Your Name</label>
+						<label for="name"
+							>Full Name <span class="req">*</span></label
+						>
 						<input
 							type="text"
 							id="name"
 							name="name"
 							required
-							placeholder="John Doe"
+							placeholder="e.g. Maria & Juan Santos"
+							autocomplete="name"
 						/>
 					</div>
+
+					<!-- Attendance (Custom Radio Buttons) -->
 					<div class="form-group">
-						<label for="attendance">Will you attend?</label>
-						<select id="attendance" name="attendance" required>
-							<option value="">Select an option...</option>
-							<option value="Yes">Yes, I'll be there!</option>
-							<option value="No">Sorry, I can't make it.</option>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="guests"
-							>Number of Guests (Including yourself)</label
+						<label
+							>Will you be attending?
+							<span class="req">*</span></label
 						>
-						<input
-							type="number"
-							id="guests"
-							name="guests"
-							min="1"
-							max="10"
-							value="1"
-						/>
+						<div class="attendance-toggle">
+							<!-- Yes Option -->
+							<input
+								type="radio"
+								id="attend-yes"
+								name="attendance"
+								value="Joyfully Accepts"
+								required
+							/>
+							<label for="attend-yes" class="toggle-btn">
+								<svg
+									width="18"
+									height="18"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="3"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
+									<polyline
+										points="20 6 9 17 4 12"
+									></polyline>
+								</svg>
+								Joyfully Accepts
+							</label>
+
+							<!-- No Option -->
+							<input
+								type="radio"
+								id="attend-no"
+								name="attendance"
+								value="Regretfully Declines"
+							/>
+							<label for="attend-no" class="toggle-btn">
+								<svg
+									width="18"
+									height="18"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="3"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
+									<line x1="18" y1="6" x2="6" y2="18"></line>
+									<line x1="6" y1="6" x2="18" y2="18"></line>
+								</svg>
+								Regretfully Declines
+							</label>
+						</div>
 					</div>
-					<button type="submit" class="btn-primary">Send RSVP</button>
+
+					<!-- Number of Guests (Custom Dropdown) -->
+					<div class="form-group">
+						<label for="guest-trigger"
+							>Number of Guests Attending</label
+						>
+
+						<div class="custom-select-wrapper" id="guest-dropdown">
+							<!-- Hidden input for the form submission -->
+							<input
+								type="hidden"
+								name="guests"
+								id="guests-input"
+								value="1 Person"
+								required
+							/>
+
+							<!-- The Trigger Button -->
+							<button
+								type="button"
+								id="guest-trigger"
+								class="select-trigger"
+								aria-haspopup="listbox"
+								aria-expanded="false"
+							>
+								<span id="guest-label">1 Person</span>
+								<svg
+									class="chevron"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="2"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+								>
+									<polyline
+										points="6 9 12 15 18 9"
+									></polyline>
+								</svg>
+							</button>
+
+							<!-- The Dropdown Menu -->
+							<ul class="select-options" role="listbox">
+								<li
+									role="option"
+									data-value="1 Person"
+									class="selected"
+								>
+									1 Person
+								</li>
+								<li role="option" data-value="2 Persons">
+									2 Persons
+								</li>
+								<li role="option" data-value="3+ Persons">
+									3+ Persons
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<!-- Message -->
+					<div class="form-group">
+						<label for="message">Message for Szhawn Marq</label>
+						<textarea
+							id="message"
+							name="message"
+							rows="4"
+							placeholder="Write your warm wishes here..."
+						></textarea>
+					</div>
+
+					<!-- Submit Button -->
+					<button type="submit" class="btn-premium-submit">
+						Send RSVP Response
+						<svg
+							width="20"
+							height="20"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="2"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+						>
+							<line x1="22" y1="2" x2="11" y2="13"></line>
+							<polygon
+								points="22 2 15 22 11 13 2 9 22 2"
+							></polygon>
+						</svg>
+					</button>
 				</form>
 			</section>
 
 			<!-- Footer -->
 			<footer>
-				<p>&copy; 2026 Szhawn's Party. Made with 💜 & 🍟</p>
+				<div class="footer-content">
+					<h3 class="footer-title">Szhawn Marq G. Resurreccion</h3>
+					<div class="footer-separator"></div>
+					<p class="footer-text">
+						&copy; 2026 Szhawn's Party. All rights reserved.
+					</p>
+				</div>
 			</footer>
 		</main>
 

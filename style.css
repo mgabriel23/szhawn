@@ -80,8 +80,15 @@ img {
 	opacity: 1;
 }
 
+/* Forces a scene to disappear instantly */
+.instant-hide {
+	display: none !important;
+	opacity: 0 !important;
+	transition: none !important;
+}
+
 /* =========================================
-   4. SCENE 0: THE TEASER (Baby Image)
+   4. SCENE 0: THE TEASER (Baby Image & Bubble)
    ========================================= */
 #scene-invite {
 	position: relative;
@@ -134,12 +141,8 @@ img {
 .speech-bubble {
 	position: relative;
 	background-color: var(--color-white);
-
-	/* 1. Reduced Padding */
 	padding: 12px 24px;
 	border-radius: 20px;
-
-	/* 2. Premium Border */
 	border: 3px solid var(--color-yellow);
 	box-shadow: 0 8px 20px rgba(50, 27, 77, 0.4);
 	max-width: 90%;
@@ -147,11 +150,11 @@ img {
 	z-index: 2;
 }
 
-/* The Tail Border (Yellow - Placed behind) */
+/* Bubble Tail */
 .speech-bubble::before {
 	content: "";
 	position: absolute;
-	bottom: -18px; /* Pushed down to match the 3px border */
+	bottom: -18px;
 	left: 50%;
 	transform: translateX(-50%);
 	border-left: 15px solid transparent;
@@ -160,11 +163,10 @@ img {
 	z-index: -1;
 }
 
-/* The Tail Fill (White - Placed in front) */
 .speech-bubble::after {
 	content: "";
 	position: absolute;
-	bottom: -13px; /* Sits inside the yellow border */
+	bottom: -13px;
 	left: 50%;
 	transform: translateX(-50%);
 	border-left: 12px solid transparent;
@@ -172,11 +174,10 @@ img {
 	border-top: 12px solid var(--color-white);
 }
 
-/* 3. Smaller Typography */
 .invite-heading {
 	font-family: var(--font-heading);
 	color: var(--color-purple-dark);
-	font-size: clamp(1.4rem, 4vw, 1.8rem); /* Scaled down */
+	font-size: clamp(1.4rem, 4vw, 1.8rem);
 	margin: 0 0 4px 0;
 	line-height: 1.2;
 }
@@ -184,19 +185,17 @@ img {
 .invite-subtext {
 	font-family: var(--font-body);
 	color: #555;
-	font-size: clamp(0.85rem, 2.5vw, 1rem); /* Scaled down */
+	font-size: clamp(0.85rem, 2.5vw, 1rem);
 	font-weight: 700;
 	margin: 0;
 	line-height: 1.4;
 }
 
-/* Adjust the button to connect perfectly */
 #open-invite-btn {
-	margin-top: 5px; /* Brings it closer to the bubble tail */
+	margin-top: 5px;
 	font-size: 1.1rem;
 	padding: 0.8rem 2rem;
 	opacity: 0;
-	/* The pop-up animation stays the same */
 	animation: popUpButton 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) 1.8s
 		forwards;
 }
@@ -309,6 +308,10 @@ img {
 	z-index: 10;
 }
 
+.slide-track.slide-up-enter {
+	animation: slideUpImpact 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
 .track-text {
 	position: absolute;
 	right: 35px;
@@ -356,10 +359,6 @@ img {
 	stroke-width: 3;
 }
 
-.slide-track.slide-up-enter {
-	animation: slideUpImpact 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
 /* =========================================
    6. SCENE 2: SPLASH SCREEN
    ========================================= */
@@ -403,11 +402,9 @@ img {
 	opacity: 0;
 	transform: translateY(20px);
 }
-
 .splash-text.animate-in {
 	animation: fadeUp 0.6s ease-out 0.3s forwards;
 }
-
 .splash-content.fly-away {
 	animation: flyUp 1s cubic-bezier(0.6, -0.28, 0.735, 0.045) forwards;
 }
@@ -419,7 +416,7 @@ img {
 	background:
 		url("https://www.transparenttextures.com/patterns/cubes.png"),
 		var(--color-purple);
-	padding-bottom: var(--spacing-lg);
+	/* padding-bottom: 1rem; */
 }
 
 .hero {
@@ -546,29 +543,15 @@ img {
 	max-width: 420px;
 	color: var(--color-purple-dark);
 	margin: 10px auto;
-
-	/* ADD THIS LINE */
 	text-align: left;
 }
 
 .detail-row {
 	display: flex;
-	/* align-items: flex-start keeps the icon aligned with the top line of text if it wraps */
 	align-items: flex-start;
 	gap: 16px;
 }
 
-.detail-text {
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
-
-	/* ADD THESE TWO LINES */
-	text-align: left;
-	flex: 1; /* Ensures the text block takes up the remaining width */
-}
-
-/* Optional: Slightly push the icon down so it centers perfectly with the 3 lines of text */
 .icon-bg {
 	width: 52px;
 	height: 52px;
@@ -577,8 +560,6 @@ img {
 	justify-content: center;
 	align-items: center;
 	flex-shrink: 0;
-
-	/* ADD THIS LINE */
 	margin-top: 4px;
 }
 
@@ -595,6 +576,8 @@ img {
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
+	text-align: left;
+	flex: 1;
 }
 
 .detail-label {
@@ -619,6 +602,33 @@ img {
 	font-size: 0.9rem;
 	font-weight: 700;
 	color: #9333ea;
+}
+
+.time-group {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin-top: 4px;
+}
+
+.time-note {
+	font-size: 0.8rem;
+	color: #888;
+	font-weight: 600;
+}
+
+.location-group {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	margin-top: 4px;
+}
+
+.location-divider {
+	width: 100%;
+	height: 1px;
+	background-color: #eee;
+	margin: 10px 0;
 }
 
 .btn-calendar {
@@ -754,7 +764,120 @@ img {
 }
 
 /* =========================================
-   PREMIUM SCRAPBOOK MILESTONES V2
+   PREMIUM MESSAGE FROM PARENTS
+   ========================================= */
+.message-section {
+	padding: var(--spacing-lg) var(--spacing-sm);
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.message-header {
+	text-align: center;
+	margin-bottom: 2.5rem;
+}
+
+.message-subtitle {
+	display: block;
+	color: var(--color-yellow);
+	font-family: var(--font-body);
+	font-size: 0.8rem;
+	font-weight: 900;
+	text-transform: uppercase;
+	letter-spacing: 4px;
+	margin-bottom: 0.5rem;
+}
+
+/* The White Card */
+.premium-message-card {
+	background: var(--color-white);
+	border-radius: 24px;
+	padding: 3.5rem 3rem;
+	box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+	position: relative;
+	max-width: 700px;
+	margin: 0 auto;
+}
+
+/* The Floating Quote Mark */
+.quote-icon {
+	position: absolute;
+	top: -30px;
+	left: 30px;
+	background: var(--color-white);
+	padding: 8px;
+	border-radius: 50%;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.message-content {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.message-text {
+	font-family: var(--font-body);
+	color: #475569; /* Premium Slate Grey */
+	font-size: clamp(1rem, 2.5vw, 1.1rem);
+	line-height: 1.8;
+	font-weight: 600;
+	margin: 0;
+	text-align: left;
+}
+
+/* The Purple Highlight for the Name */
+.highlight-name {
+	color: #9333ea; /* Theme Purple */
+	font-weight: 900;
+	font-size: 1.05em;
+}
+
+/* =========================================
+   RESPONSIVE DESIGN (Mobile & 320px)
+   ========================================= */
+@media (max-width: 600px) {
+	.premium-message-card {
+		padding: 2.5rem 1.5rem; /* Tighter padding on mobile */
+		border-radius: 20px;
+	}
+
+	.quote-icon {
+		left: 20px;
+		top: -25px;
+	}
+
+	.quote-icon svg {
+		width: 45px;
+		height: 45px;
+	}
+
+	.message-text {
+		/* Ensure text is perfectly readable on tiny screens */
+		font-size: 0.95rem;
+		line-height: 1.7;
+		text-align: center; /* Center text on mobile for a warmer feel */
+	}
+}
+
+/* Ultra-small screens (320px) */
+@media (max-width: 400px) {
+	.premium-message-card {
+		padding: 2rem 1.2rem;
+	}
+	.message-text {
+		font-size: 0.9rem;
+	}
+	.highlight-name {
+		font-size: 1em;
+	}
+}
+
+/* =========================================
+   11. PREMIUM SCRAPBOOK MILESTONES V2
    ========================================= */
 .milestones {
 	padding: 5rem 1rem;
@@ -762,7 +885,6 @@ img {
 	overflow: hidden;
 }
 
-/* A subtle radial glow behind the timeline */
 .milestones::before {
 	content: "";
 	position: absolute;
@@ -788,7 +910,6 @@ img {
 	z-index: 1;
 }
 
-/* The Center Dotted Line (Glowing Gradient) */
 .timeline-line {
 	position: absolute;
 	top: 0;
@@ -821,7 +942,6 @@ img {
 	box-shadow: 0 0 15px rgba(255, 199, 44, 0.4);
 }
 
-/* Timeline Rows */
 .milestone-row {
 	position: relative;
 	display: flex;
@@ -837,10 +957,9 @@ img {
 	padding-right: 50%;
 }
 
-/* The Glowing Timeline Dots */
 .timeline-dot {
 	position: absolute;
-	top: 40px; /* Aligns with the top of the photo */
+	top: 40px;
 	left: 50%;
 	width: 24px;
 	height: 24px;
@@ -855,15 +974,13 @@ img {
 	transition: all 0.3s ease;
 }
 
-/* The Polaroid Card Container */
 .milestone-card {
 	width: 85%;
 	max-width: 340px;
 	position: relative;
-	padding-top: 10px; /* Space for the tape */
+	padding-top: 10px;
 }
 
-/* The Washi Tape Effect */
 .tape {
 	position: absolute;
 	top: -5px;
@@ -880,7 +997,6 @@ img {
 	z-index: 10;
 }
 
-/* The Polaroid Frame */
 .polaroid {
 	background: var(--color-white);
 	padding: 12px 12px 24px 12px;
@@ -897,7 +1013,6 @@ img {
 	transform: rotate(3deg);
 }
 
-/* Hover Effect (Lifting the photo) */
 .milestone-card:hover .polaroid {
 	transform: rotate(0deg) scale(1.05) translateY(-10px);
 	box-shadow: 0 25px 50px rgba(255, 199, 44, 0.3);
@@ -911,7 +1026,6 @@ img {
 		0 0 30px var(--color-yellow);
 }
 
-/* The Photo */
 .polaroid img {
 	width: 100%;
 	aspect-ratio: 1 / 1;
@@ -921,7 +1035,6 @@ img {
 	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Typography */
 .polaroid-caption {
 	text-align: center;
 	display: flex;
@@ -931,7 +1044,6 @@ img {
 
 .m-month {
 	font-family: var(--font-heading);
-	/* Premium Gradient Text */
 	background: linear-gradient(45deg, #9333ea, #4b2c70);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
@@ -948,61 +1060,7 @@ img {
 }
 
 /* =========================================
-   MOBILE LAYOUT (Under 768px)
-   ========================================= */
-@media (max-width: 768px) {
-	.timeline-line {
-		left: 30px;
-		transform: none;
-	}
-
-	.milestone-row,
-	.milestone-row:nth-child(even) {
-		justify-content: flex-start;
-		padding-left: 70px;
-		padding-right: 0;
-		margin-bottom: 3rem;
-	}
-
-	.timeline-dot {
-		left: 30px;
-		top: 30px;
-	}
-
-	.milestone-card {
-		width: 100%;
-		max-width: 100%;
-	}
-
-	/* Keep slight rotation on mobile for the scrapbook feel */
-	.polaroid {
-		transform: rotate(-2deg);
-	}
-	.milestone-row:nth-child(even) .polaroid {
-		transform: rotate(2deg);
-	}
-
-	/* Tap effect instead of hover */
-	.milestone-card:active .polaroid {
-		transform: rotate(0deg) scale(0.98);
-	}
-}
-
-/* Message */
-.message blockquote {
-	background: var(--color-yellow);
-	color: var(--color-purple);
-	padding: var(--spacing-md);
-	border-radius: var(--border-radius);
-	font-size: 1.2rem;
-	font-style: italic;
-	font-weight: bold;
-	text-align: center;
-	box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
-
-/* =========================================
-   11. MAP SECTION
+   12. MAP SECTION
    ========================================= */
 .map-header {
 	text-align: center;
@@ -1082,7 +1140,6 @@ img {
 .btn-google:hover {
 	background-color: #7e22ce;
 }
-
 .btn-waze {
 	background-color: var(--color-yellow);
 	color: var(--color-purple-dark);
@@ -1092,58 +1149,591 @@ img {
 	background-color: var(--color-yellow-hover);
 }
 
-/* =========================================
-   12. RSVP FORM
-   ========================================= */
-#rsvp-form {
-	background: var(--color-white);
-	padding: var(--spacing-md);
-	border-radius: var(--border-radius);
-	color: var(--color-purple);
+/* Venue Details inside Map */
+.venue-details-grid {
 	display: flex;
 	flex-direction: column;
-	gap: var(--spacing-sm);
+	align-items: center;
+	gap: 1.5rem;
+	max-width: 500px;
+	margin: 0 auto;
+	padding: 0 1rem;
+}
+
+.venue-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 8px;
+	width: 100%;
+}
+
+.venue-time-box {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	margin-bottom: 4px;
+}
+
+.v-tag {
+	font-family: var(--font-body);
+	font-size: 0.75rem;
+	font-weight: 900;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+	color: var(--color-yellow);
+}
+
+.v-time {
+	font-family: var(--font-heading);
+	font-size: 1.3rem;
+	color: var(--color-white);
+	line-height: 1;
+}
+
+.v-name {
+	font-family: var(--font-body);
+	font-size: 1.1rem;
+	font-weight: 900;
+	color: var(--color-white);
+	margin: 0;
+	line-height: 1.3;
+}
+
+.v-address {
+	font-family: var(--font-body);
+	font-size: 0.9rem;
+	font-weight: 600;
+	color: var(--color-text-muted);
+	margin: 0;
+}
+
+.venue-divider {
+	width: 60%;
+	height: 1px;
+	background: linear-gradient(
+		to right,
+		transparent,
+		rgba(255, 255, 255, 0.2),
+		transparent
+	);
+	margin: 0.5rem 0;
+}
+
+/* =========================================
+   13. PREMIUM RSVP FORM
+   ========================================= */
+.rsvp {
+	max-width: 600px;
+	margin: 0 auto;
+	padding-bottom: 3rem;
+}
+
+.rsvp-header {
+	text-align: center;
+	margin-bottom: 2rem;
+}
+
+.rsvp-subtitle {
+	display: block;
+	color: var(--color-yellow);
+	font-family: var(--font-body);
+	font-size: 0.75rem;
+	font-weight: 900;
+	text-transform: uppercase;
+	letter-spacing: 3px;
+	margin-bottom: 0.5rem;
+}
+
+.rsvp-dots {
+	display: flex;
+	justify-content: center;
+	gap: 6px;
+	margin: 10px 0 15px 0;
+}
+.rsvp-dots span {
+	width: 6px;
+	height: 6px;
+	background-color: var(--color-yellow);
+	border-radius: 50%;
+}
+.rsvp-dots span:nth-child(2) {
+	background-color: #9333ea;
+}
+
+/* Fixed contrast for description */
+.rsvp-desc {
+	color: var(--color-text-muted);
+	font-family: var(--font-body);
+	font-size: 0.95rem;
+	font-weight: 600;
+}
+
+.rsvp .heading {
+	color: var(--color-yellow);
+}
+
+#rsvp-form {
+	background: var(--color-white);
+	padding: 2.5rem;
+	border-radius: 30px;
+	box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
 }
 
 .form-group {
 	display: flex;
 	flex-direction: column;
 }
+
 .form-group label {
-	font-weight: bold;
-	margin-bottom: 5px;
+	font-family: var(--font-body);
+	font-size: 0.8rem;
+	font-weight: 900;
+	color: var(--color-purple-dark);
+	margin-bottom: 8px;
+	text-transform: uppercase;
+	letter-spacing: 1px;
 }
 
-.form-group input,
-.form-group select {
-	padding: 12px;
-	border: 2px solid #ccc;
-	border-radius: 8px;
+.req {
+	color: var(--color-brand-red);
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+	width: 100%;
+	padding: 16px;
+	background-color: #f2f2f7;
+	border: 2px solid transparent;
+	border-radius: 14px;
+	font-family: var(--font-body);
+	font-size: 16px; /* PREVENTS iOS ZOOM */
+	color: var(--color-purple-dark);
+	transition: all 0.2s ease;
+	outline: none;
+	-webkit-appearance: none;
+}
+
+.form-group textarea {
+	resize: vertical;
+	min-height: 100px;
+}
+
+.form-group input[type="text"]::placeholder,
+.form-group textarea::placeholder {
+	color: #8e8e93;
+	font-weight: 500;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+	background-color: var(--color-white);
+	border-color: #9333ea;
+	box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.15);
+}
+
+/* Attendance Toggle */
+.attendance-toggle {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 12px;
+}
+
+.attendance-toggle input[type="radio"] {
+	display: none;
+}
+
+.toggle-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	padding: 16px 10px;
+	background-color: #f2f2f7;
+	border: 2px solid transparent;
+	border-radius: 14px;
+	font-family: var(--font-body);
+	font-size: 0.9rem;
+	font-weight: 800;
+	color: #666;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	text-align: center;
+}
+
+.toggle-btn svg {
+	color: #666;
+}
+
+/* Green Accept */
+.attendance-toggle input#attend-yes:checked + .toggle-btn {
+	background-color: #ecfdf5;
+	border-color: #10b981;
+	color: #065f46;
+	box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+}
+.attendance-toggle input#attend-yes:checked + .toggle-btn svg {
+	color: #10b981;
+}
+
+/* Red Decline */
+.attendance-toggle input#attend-no:checked + .toggle-btn {
+	background-color: #fef2f2;
+	border-color: #ef4444;
+	color: #991b1b;
+	box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+}
+.attendance-toggle input#attend-no:checked + .toggle-btn svg {
+	color: #ef4444;
+}
+
+/* Custom Dropdown */
+.custom-select-wrapper {
+	position: relative;
+	user-select: none;
+	z-index: 1;
+}
+.custom-select-wrapper.open {
+	z-index: 100;
+}
+
+.select-trigger {
+	width: 100%;
+	padding: 16px;
+	background-color: #f2f2f7;
+	border: 2px solid transparent;
+	border-radius: 14px;
+	font-family: var(--font-body);
+	font-size: 16px;
+	color: var(--color-purple-dark);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.select-trigger .chevron {
+	transition: transform 0.3s ease;
+	color: #666;
+}
+
+.custom-select-wrapper.open .select-trigger {
+	background-color: var(--color-white);
+	border-color: #9333ea;
+	box-shadow: 0 0 0 4px rgba(147, 51, 234, 0.15);
+}
+.custom-select-wrapper.open .select-trigger .chevron {
+	transform: rotate(180deg);
+	color: #9333ea;
+}
+
+.select-options {
+	position: absolute;
+	top: calc(100% + 8px);
+	left: 0;
+	right: 0;
+	background: var(--color-white);
+	border-radius: 16px;
+	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+	list-style: none;
+	padding: 8px;
+	z-index: 101;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(-10px);
+	transition: all 0.2s ease;
+	border: 1px solid #eee;
+}
+
+.custom-select-wrapper.open .select-options {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.select-options li {
+	padding: 14px 16px;
 	font-family: var(--font-body);
 	font-size: 1rem;
+	font-weight: 700;
+	color: var(--color-purple-dark);
+	border-radius: 10px;
+	cursor: pointer;
+	transition: background 0.2s;
 }
 
-.form-group input:focus,
-.form-group select:focus {
-	border-color: var(--color-purple);
-	outline: none;
+.select-options li:hover {
+	background-color: #f2f2f7;
+}
+.select-options li.selected {
+	background-color: #f3e8ff;
+	color: #9333ea;
 }
 
-#rsvp-form .btn-primary {
-	margin-top: var(--spacing-sm);
-	width: 100%;
+.btn-premium-submit {
+	background-color: var(--color-yellow);
+	color: var(--color-purple-dark);
+	font-family: var(--font-body);
+	font-size: 1.1rem;
+	font-weight: 900;
+	padding: 18px;
+	border-radius: 16px;
+	border: none;
+	cursor: pointer;
+	box-shadow: 0 8px 20px rgba(255, 199, 44, 0.4);
+	transition:
+		transform 0.1s,
+		box-shadow 0.1s,
+		background 0.2s;
+	margin-top: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+}
+
+.btn-premium-submit:active {
+	transform: scale(0.97);
+	box-shadow: 0 4px 10px rgba(255, 199, 44, 0.4);
+	background-color: var(--color-yellow-hover);
 }
 
 /* =========================================
-   13. FOOTER & MUTE BUTTON
+   14. GIFT IDEAS SECTION
+   ========================================= */
+.gifts-section {
+	padding: var(--spacing-lg) var(--spacing-sm);
+	max-width: 900px;
+	margin: 0 auto;
+}
+
+.gift-header {
+	text-align: center;
+	margin-bottom: 3.5rem;
+	max-width: 650px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.gift-phrase {
+	font-family: var(--font-body);
+	color: var(--color-text-muted);
+	font-size: 1.05rem;
+	line-height: 1.7;
+	font-style: italic;
+	margin-top: 1rem;
+	font-weight: 600;
+}
+
+.gift-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1rem;
+	width: 100%;
+	max-width: 800px;
+	margin: 0 auto;
+	align-items: start;
+}
+
+.gift-item {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	padding: 1rem 0.5rem;
+	transition: transform 0.3s ease;
+	justify-content: flex-start;
+}
+
+.gift-item:hover {
+	transform: translateY(-5px);
+}
+
+.gift-title {
+	font-family: var(--font-heading);
+	background: linear-gradient(
+		to right,
+		#ffffff,
+		var(--color-yellow),
+		#ffffff
+	);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	color: transparent;
+	font-size: 1.2rem;
+	margin: 0;
+	line-height: 1.3;
+	padding: 0 4px;
+	text-align: center;
+	min-height: 2.6rem;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+}
+
+.gift-icon-bg {
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	background: linear-gradient(
+		135deg,
+		rgba(255, 255, 255, 0.1),
+		rgba(255, 255, 255, 0.02)
+	);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: 1.5rem;
+	color: var(--color-yellow);
+	box-shadow:
+		0 10px 25px rgba(0, 0, 0, 0.2),
+		inset 0 0 15px rgba(255, 199, 44, 0.1);
+	transition: all 0.3s ease;
+}
+
+.gift-item:hover .gift-icon-bg {
+	background: var(--color-yellow);
+	color: var(--color-purple-dark);
+	box-shadow: 0 15px 35px rgba(255, 199, 44, 0.4);
+}
+
+.gift-divider {
+	width: 1px;
+	height: 100px;
+	background: linear-gradient(
+		to bottom,
+		transparent,
+		rgba(255, 255, 255, 0.2),
+		transparent
+	);
+}
+
+/* =========================================
+   15. DRESS CODE SECTION
+   ========================================= */
+.dress-code-section {
+	padding: var(--spacing-lg) var(--spacing-sm);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.dress-code-content {
+	background: radial-gradient(
+		circle at top,
+		rgba(255, 255, 255, 0.05) 0%,
+		transparent 70%
+	);
+	border-radius: var(--border-radius);
+	padding: 3rem 2rem;
+	text-align: center;
+	max-width: 500px;
+	width: 100%;
+	transition: transform 0.3s ease;
+}
+
+.dress-code-content:hover {
+	transform: translateY(-5px);
+}
+
+.dress-icon-wrapper {
+	display: inline-flex;
+	justify-content: center;
+	align-items: center;
+	width: 80px;
+	height: 80px;
+	border-radius: 50%;
+	background: rgba(255, 199, 44, 0.1);
+	color: var(--color-yellow);
+	margin-bottom: 1.5rem;
+	box-shadow: 0 0 20px rgba(255, 199, 44, 0.15);
+}
+
+.dress-text {
+	font-family: var(--font-body);
+	color: var(--color-white);
+	font-size: 1.1rem;
+	line-height: 1.6;
+	font-weight: 600;
+	margin: 0;
+}
+
+/* =========================================
+   16. FOOTER & MUTE BUTTON
    ========================================= */
 footer {
 	text-align: center;
-	padding: var(--spacing-md);
+	/* Reduced top and bottom padding significantly */
+	padding: 2rem 1rem 4rem 1rem;
+	/* Removed the massive top margin */
+	margin-top: 0;
+	position: relative;
+	background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.25));
+}
+
+/* The glowing gradient line */
+footer::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 80%;
+	max-width: 600px;
+	height: 1px;
+	background: linear-gradient(
+		to right,
+		transparent,
+		rgba(255, 199, 44, 0.4),
+		transparent
+	);
+}
+
+.footer-content {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	/* Reduced gap from 1.2rem to 0.8rem */
+	gap: 0.8rem;
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+/* Typography stays the same */
+.footer-title {
+	font-family: var(--font-heading);
+	color: var(--color-yellow);
+	font-size: 1.2rem;
+	letter-spacing: 2px;
+	margin: 0;
+	text-transform: uppercase;
+	text-shadow: 0 2px 10px rgba(255, 199, 44, 0.2);
+}
+
+.footer-separator {
+	width: 40px;
+	height: 2px;
+	background-color: var(--color-text-muted);
+	opacity: 0.3;
+	border-radius: 2px;
+}
+
+.footer-text {
+	font-family: var(--font-body);
 	color: var(--color-text-muted);
-	font-size: 0.9rem;
-	border-top: 1px solid rgba(255, 255, 255, 0.1);
-	margin-top: var(--spacing-lg);
+	font-size: 0.85rem;
+	font-weight: 700;
+	letter-spacing: 1.5px;
+	margin: 0;
+	text-transform: uppercase;
 }
 
 .mute-btn {
@@ -1181,7 +1771,7 @@ footer {
 }
 
 /* =========================================
-   14. ANIMATIONS
+   17. ANIMATIONS (Keyframes)
    ========================================= */
 .animate-on-scroll {
 	opacity: 0;
@@ -1190,7 +1780,6 @@ footer {
 		opacity 0.6s ease-out,
 		transform 0.6s ease-out;
 }
-
 .animate-on-scroll.is-visible {
 	opacity: 1;
 	transform: translateY(0);
@@ -1292,7 +1881,7 @@ footer {
 }
 
 /* =========================================
-   15. DESKTOP / LARGE SCREENS
+   18. DESKTOP LAYOUT (min-width: 900px)
    ========================================= */
 @media (min-width: 900px) {
 	.hero {
@@ -1315,14 +1904,12 @@ footer {
 		align-items: flex-start;
 		text-align: left;
 	}
-
 	.bear-avatar-wrapper {
 		grid-area: avatar;
 		justify-self: flex-start;
 		margin: 0;
 		margin-top: 1rem;
 	}
-
 	.premium-card {
 		grid-area: card;
 		margin: 0;
@@ -1330,7 +1917,6 @@ footer {
 		justify-self: end;
 		transition: transform 0.3s ease;
 	}
-
 	.premium-card:hover {
 		transform: translateY(-5px);
 	}
@@ -1349,7 +1935,6 @@ footer {
 		font-size: 1rem;
 		letter-spacing: 3px;
 	}
-
 	.timeline {
 		margin-left: auto;
 		margin-right: auto;
@@ -1361,9 +1946,103 @@ footer {
 }
 
 /* =========================================
-   16. ULTRA-SMALL SCREENS (320px - 400px)
+   19. TABLET LAYOUT (max-width: 768px)
+   ========================================= */
+@media (max-width: 768px) {
+	.timeline-line {
+		left: 30px;
+		transform: none;
+	}
+	.milestone-row,
+	.milestone-row:nth-child(even) {
+		justify-content: flex-start;
+		padding-left: 70px;
+		padding-right: 0;
+		margin-bottom: 3rem;
+	}
+	.timeline-dot {
+		left: 30px;
+		top: 30px;
+	}
+	.milestone-card {
+		width: 100%;
+		max-width: 100%;
+	}
+
+	.polaroid {
+		transform: rotate(-2deg);
+	}
+	.milestone-row:nth-child(even) .polaroid {
+		transform: rotate(2deg);
+	}
+	.milestone-card:active .polaroid {
+		transform: rotate(0deg) scale(0.98);
+	}
+
+	.gift-divider {
+		display: none;
+	}
+	.gift-grid {
+		gap: 0.5rem;
+	}
+}
+
+/* =========================================
+   20. MOBILE LAYOUT (max-width: 450px)
+   ========================================= */
+@media (max-width: 450px) {
+	/* RSVP Form adjustments */
+	#rsvp-form {
+		padding: 1.5rem 1.25rem;
+		border-radius: 20px;
+		gap: 1.2rem;
+	}
+	.form-group label {
+		font-size: 0.7rem;
+		margin-bottom: 6px;
+		letter-spacing: 0.5px;
+	}
+	.form-group input[type="text"],
+	.form-group textarea,
+	.select-trigger {
+		padding: 14px;
+		border-radius: 10px;
+	}
+	.attendance-toggle {
+		grid-template-columns: 1fr;
+		gap: 8px;
+	}
+	.toggle-btn {
+		padding: 14px;
+		font-size: 0.85rem;
+		border-radius: 10px;
+	}
+	.select-options {
+		border-radius: 12px;
+		padding: 6px;
+	}
+	.select-options li {
+		padding: 12px 14px;
+		font-size: 0.95rem;
+	}
+	.btn-premium-submit {
+		padding: 14px;
+		font-size: 1rem;
+		border-radius: 12px;
+	}
+	.rsvp-header {
+		margin-bottom: 1.5rem;
+	}
+	.rsvp-desc {
+		font-size: 0.85rem;
+	}
+}
+
+/* =========================================
+   21. ULTRA-SMALL SCREENS (max-width: 400px)
    ========================================= */
 @media (max-width: 400px) {
+	/* Hero Tweaks */
 	.event-badge {
 		font-size: 0.65rem;
 		padding: 6px 12px;
@@ -1383,7 +2062,6 @@ footer {
 		font-size: 2rem;
 		margin-bottom: 1.5rem;
 	}
-
 	.bear-avatar-wrapper {
 		width: 130px;
 		height: 130px;
@@ -1409,6 +2087,7 @@ footer {
 			0 8px 20px rgba(0, 0, 0, 0.4);
 	}
 
+	/* Card Tweaks */
 	.premium-card {
 		padding: 16px;
 		gap: 16px;
@@ -1416,26 +2095,32 @@ footer {
 	}
 	.detail-row {
 		gap: 12px;
+		align-items: flex-start;
 	}
 	.icon-bg {
-		width: 44px;
-		height: 44px;
+		width: 40px;
+		height: 40px;
+		margin-top: 2px;
 	}
 	.icon-bg svg {
-		width: 20px;
-		height: 20px;
+		width: 18px;
+		height: 18px;
 	}
 	.detail-main {
-		font-size: 1rem;
+		font-size: 0.95rem;
 	}
 	.detail-sub {
 		font-size: 0.8rem;
+	}
+	.time-note {
+		font-size: 0.75rem;
 	}
 	.btn-calendar {
 		padding: 12px;
 		font-size: 0.9rem;
 	}
 
+	/* Countdown Tweaks */
 	.countdown-container {
 		gap: 8px;
 	}
@@ -1450,6 +2135,7 @@ footer {
 		font-size: 0.65rem;
 	}
 
+	/* Map Tweaks */
 	.map-address {
 		font-size: 0.9rem;
 	}
@@ -1464,10 +2150,65 @@ footer {
 		font-size: 0.9rem;
 		padding: 14px;
 	}
+	.venue-details-grid {
+		gap: 1.2rem;
+		padding: 0 0.5rem;
+	}
+	.v-name {
+		font-size: 1rem;
+	}
+	.v-address {
+		font-size: 0.85rem;
+	}
+	.v-time {
+		font-size: 1.2rem;
+	}
+	.v-tag {
+		font-size: 0.65rem;
+	}
+
+	/* Gift Tweaks */
+	.gift-phrase {
+		font-size: 0.95rem;
+	}
+	.gift-item {
+		padding: 0.5rem 0;
+	}
+	.gift-icon-bg {
+		width: 55px;
+		height: 55px;
+		margin-bottom: 1rem;
+	}
+	.gift-icon-bg svg {
+		width: 24px;
+		height: 24px;
+	}
+	.gift-title {
+		font-size: 0.8rem;
+		line-height: 1.2;
+		min-height: 2.2rem;
+	}
+
+	/* Dress Code Tweaks */
+	.dress-code-content {
+		padding: 2rem 1rem;
+	}
+	.dress-icon-wrapper {
+		width: 60px;
+		height: 60px;
+		margin-bottom: 1rem;
+	}
+	.dress-icon-wrapper svg {
+		width: 30px;
+		height: 30px;
+	}
+	.dress-text {
+		font-size: 1rem;
+	}
 }
 
 /* =========================================
-   17. ACCESSIBILITY (Reduced Motion)
+   22. ACCESSIBILITY (Reduced Motion)
    ========================================= */
 @media (prefers-reduced-motion: reduce) {
 	.animate-on-scroll {
@@ -1504,620 +2245,10 @@ footer {
 	.avatar-photo {
 		animation: none;
 	}
+
 	@keyframes fadeOut {
 		to {
 			opacity: 0;
 		}
-	}
-}
-
-/* Forces a scene to disappear instantly with no fade */
-.instant-hide {
-	display: none !important;
-	opacity: 0 !important;
-	transition: none !important;
-}
-
-/* =========================================
-   PREMIUM SCRAPBOOK MILESTONES
-   ========================================= */
-.milestones {
-	padding: 4rem 1rem;
-	background-color: rgba(50, 27, 77, 0.5); /* Slight contrast from main bg */
-	border-radius: 40px;
-	margin-bottom: 4rem;
-}
-
-.timeline-wrapper {
-	position: relative;
-	max-width: 900px;
-	margin: 0 auto;
-	padding: 2rem 0;
-}
-
-/* The Center Dotted Line (Desktop) */
-.timeline-line {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 50%;
-	width: 4px;
-	background-image: linear-gradient(
-		to bottom,
-		var(--color-yellow) 50%,
-		transparent 50%
-	);
-	background-size: 4px 20px;
-	transform: translateX(-50%);
-	z-index: 0;
-}
-
-.milestone-row {
-	position: relative;
-	display: flex;
-	justify-content: flex-end;
-	padding-left: 50%;
-	margin-bottom: 3rem;
-	z-index: 1;
-}
-
-/* Alternating Layout */
-.milestone-row:nth-child(even) {
-	justify-content: flex-start;
-	padding-left: 0;
-	padding-right: 50%;
-}
-
-.milestone-card {
-	width: 80%;
-	max-width: 320px;
-}
-
-/* The Polaroid Effect */
-.polaroid {
-	background: var(--color-white);
-	padding: 12px 12px 20px 12px;
-	border-radius: 8px;
-	box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-	transform: rotate(-3deg);
-	transition:
-		transform 0.3s ease,
-		box-shadow 0.3s ease;
-	position: relative;
-}
-
-.milestone-row:nth-child(even) .polaroid {
-	transform: rotate(3deg);
-}
-
-/* Hover effect for desktop */
-.polaroid:hover {
-	transform: rotate(0deg) scale(1.05);
-	box-shadow: 0 15px 40px rgba(255, 199, 44, 0.3);
-	z-index: 10;
-}
-
-/* The Photo */
-.polaroid img {
-	width: 100%;
-	aspect-ratio: 1 / 1;
-	object-fit: cover;
-	border-radius: 4px;
-	margin-bottom: 15px;
-}
-
-/* The Caption */
-.polaroid-caption {
-	text-align: center;
-	display: flex;
-	flex-direction: column;
-	gap: 4px;
-}
-
-.m-month {
-	font-family: var(--font-heading);
-	color: #9333ea; /* Theme Purple */
-	font-size: 1.2rem;
-	text-transform: uppercase;
-}
-
-.m-title {
-	font-family: var(--font-body);
-	color: #555;
-	font-size: 0.95rem;
-	font-weight: 800;
-}
-
-/* The Dotted Connector Dots */
-.milestone-row::after {
-	content: "";
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 20px;
-	height: 20px;
-	background: var(--color-yellow);
-	border: 4px solid var(--color-purple-dark);
-	border-radius: 50%;
-	transform: translate(-50%, -50%);
-	z-index: 2;
-	box-shadow: 0 0 10px rgba(255, 199, 44, 0.5);
-}
-
-/* Decorative Stars (CSS Only) */
-.timeline-wrapper::before,
-.timeline-wrapper::after {
-	content: "★";
-	position: absolute;
-	color: var(--color-yellow);
-	font-size: 2rem;
-	opacity: 0.3;
-}
-.timeline-wrapper::before {
-	top: 10%;
-	left: 10%;
-}
-.timeline-wrapper::after {
-	bottom: 10%;
-	right: 10%;
-}
-
-/* =========================================
-   MOBILE LAYOUT (Under 768px)
-   ========================================= */
-@media (max-width: 768px) {
-	.timeline-line {
-		left: 20px; /* Moves line to the left */
-		transform: none;
-	}
-
-	.milestone-row,
-	.milestone-row:nth-child(even) {
-		justify-content: flex-start;
-		padding-left: 50px; /* Space for the line */
-		padding-right: 0;
-		margin-bottom: 2.5rem;
-	}
-
-	.milestone-row::after {
-		left: 20px; /* Aligns dot with the line */
-	}
-
-	.milestone-card {
-		width: 100%;
-		max-width: 100%;
-	}
-
-	.polaroid,
-	.milestone-row:nth-child(even) .polaroid {
-		transform: rotate(
-			0deg
-		); /* Remove rotation on mobile for cleaner look */
-	}
-
-	.polaroid:hover {
-		transform: scale(1.02); /* Simpler hover for touch devices */
-	}
-}
-
-/* =========================================
-   PREMIUM VENUE DETAILS LAYOUT
-   ========================================= */
-.venue-details-grid {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 1.5rem;
-	max-width: 500px;
-	margin: 0 auto;
-	padding: 0 1rem;
-}
-
-.venue-item {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	text-align: center;
-	gap: 8px;
-	width: 100%;
-}
-
-/* The Tag and Time Container */
-.venue-time-box {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	gap: 4px;
-	margin-bottom: 4px;
-}
-
-/* The small yellow label (BAPTISM / RECEPTION) */
-.v-tag {
-	font-family: var(--font-body);
-	font-size: 0.75rem;
-	font-weight: 900;
-	text-transform: uppercase;
-	letter-spacing: 3px;
-	color: var(--color-yellow);
-}
-
-/* The Time (12:00 NN) */
-.v-time {
-	font-family: var(--font-heading);
-	font-size: 1.3rem;
-	color: var(--color-white);
-	line-height: 1;
-}
-
-/* The Venue Name */
-.v-name {
-	font-family: var(--font-body);
-	font-size: 1.1rem;
-	font-weight: 900;
-	color: var(--color-white);
-	margin: 0;
-	line-height: 1.3;
-}
-
-/* The Address */
-.v-address {
-	font-family: var(--font-body);
-	font-size: 0.9rem;
-	font-weight: 600;
-	color: var(--color-text-muted);
-	margin: 0;
-}
-
-/* Subtle Divider Line between the two venues */
-.venue-divider {
-	width: 60%;
-	height: 1px;
-	background: linear-gradient(
-		to right,
-		transparent,
-		rgba(255, 255, 255, 0.2),
-		transparent
-	);
-	margin: 0.5rem 0;
-}
-
-/* =========================================
-   RESPONSIVE ADJUSTMENTS (320px - 400px)
-   ========================================= */
-@media (max-width: 400px) {
-	.venue-details-grid {
-		gap: 1.2rem;
-		padding: 0 0.5rem;
-	}
-	.v-name {
-		font-size: 1rem;
-	}
-	.v-address {
-		font-size: 0.85rem;
-	}
-	.v-time {
-		font-size: 1.2rem;
-	}
-	.v-tag {
-		font-size: 0.65rem;
-	}
-}
-
-/* =========================================
-   PREMIUM CARD REFINEMENTS
-   ========================================= */
-
-/* Grouping the times */
-.time-group {
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
-	margin-top: 4px;
-}
-
-.time-note {
-	font-size: 0.8rem;
-	color: #888;
-	font-weight: 600;
-}
-
-/* Grouping locations */
-.location-group {
-	display: flex;
-	flex-direction: column;
-	gap: 2px;
-	margin-top: 4px;
-}
-
-/* Subtle line between the two venues */
-.location-divider {
-	width: 100%;
-	height: 1px;
-	background-color: #eee;
-	margin: 10px 0;
-}
-
-/* =========================================
-   ULTRA-SMALL SCREENS (320px - 400px) FIX
-   ========================================= */
-@media (max-width: 400px) {
-	.premium-card {
-		/* 1. Reduce padding to give text more breathing room */
-		padding: 16px;
-		gap: 16px;
-	}
-
-	.detail-row {
-		/* 2. Reduce the gap between the icon and text */
-		gap: 12px;
-		align-items: flex-start; /* Keep icon at the top if text wraps */
-	}
-
-	.icon-bg {
-		/* 3. Make icons slightly smaller so text has more width */
-		width: 40px;
-		height: 40px;
-		margin-top: 2px;
-	}
-
-	.icon-bg svg {
-		width: 18px;
-		height: 18px;
-	}
-
-	/* 4. Tweak Font Sizes specifically for 320px screens */
-	.detail-label {
-		font-size: 0.7rem;
-	}
-	.detail-main {
-		font-size: 0.95rem;
-	}
-	.detail-sub {
-		font-size: 0.8rem;
-	}
-	.time-note {
-		font-size: 0.75rem;
-	}
-
-	/* Button adjustment */
-	.btn-calendar {
-		padding: 12px;
-		font-size: 0.9rem;
-	}
-}
-
-/* =========================================
-   PREMIUM GIFT IDEAS SECTION (V3 - Clean)
-   ========================================= */
-.gifts-section {
-	padding: var(--spacing-lg) var(--spacing-sm);
-	max-width: 900px;
-	margin: 0 auto;
-}
-
-.gift-header {
-	text-align: center;
-	margin-bottom: 3.5rem;
-	max-width: 650px;
-	margin-left: auto;
-	margin-right: auto;
-}
-
-.gift-phrase {
-	font-family: var(--font-body);
-	color: var(--color-text-muted);
-	font-size: 1.05rem;
-	line-height: 1.7;
-	font-style: italic;
-	margin-top: 1rem;
-	font-weight: 600;
-}
-
-/* The Grid Layout */
-.gift-grid {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr); /* Forces exactly 3 equal columns */
-	gap: 1rem;
-	width: 100%;
-	max-width: 800px;
-	margin: 0 auto;
-	align-items: start; /* Aligns the tops of the items */
-}
-
-/* Individual Items */
-.gift-item {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	text-align: center;
-	padding: 1rem 0.5rem;
-	transition: transform 0.3s ease;
-	/* Ensure content starts from the top */
-	justify-content: flex-start;
-}
-
-.gift-item:hover {
-	transform: translateY(-5px);
-}
-
-/* Typography */
-.gift-title {
-	font-family: var(--font-heading);
-	background: linear-gradient(
-		to right,
-		#ffffff,
-		var(--color-yellow),
-		#ffffff
-	);
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-	background-clip: text;
-	color: transparent;
-	font-size: 1.2rem;
-	margin: 0;
-	line-height: 1.3;
-	padding: 0 4px;
-	text-align: center;
-
-	/* THE FIX: Reserve space for 2 lines of text */
-	min-height: 2.6rem;
-	display: flex;
-	align-items: flex-start;
-	justify-content: center;
-}
-
-/* Glowing Icon Base */
-.gift-icon-bg {
-	width: 80px;
-	height: 80px;
-	border-radius: 50%;
-	background: linear-gradient(
-		135deg,
-		rgba(255, 255, 255, 0.1),
-		rgba(255, 255, 255, 0.02)
-	);
-	border: 1px solid rgba(255, 255, 255, 0.1);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	margin-bottom: 1.5rem;
-	color: var(--color-yellow);
-	/* Soft Glow effect */
-	box-shadow:
-		0 10px 25px rgba(0, 0, 0, 0.2),
-		inset 0 0 15px rgba(255, 199, 44, 0.1);
-	transition: all 0.3s ease;
-}
-
-.gift-item:hover .gift-icon-bg {
-	background: var(--color-yellow);
-	color: var(--color-purple-dark);
-	box-shadow: 0 15px 35px rgba(255, 199, 44, 0.4);
-}
-
-/* =========================================
-   ULTRA-SMALL SCREENS (320px - 400px)
-   ========================================= */
-@media (max-width: 400px) {
-	.gift-phrase {
-		font-size: 0.95rem;
-	}
-
-	.gift-item {
-		padding: 0.5rem 0;
-	}
-
-	.gift-icon-bg {
-		width: 55px;
-		height: 55px;
-		margin-bottom: 1rem;
-	}
-
-	.gift-icon-bg svg {
-		width: 24px;
-		height: 24px;
-	}
-
-	.gift-title {
-		font-size: 0.8rem;
-		line-height: 1.2;
-		min-height: 2.2rem; /* Adjusted for mobile font size */
-	}
-}
-
-/* Vertical Dividers (Desktop only) */
-.gift-divider {
-	width: 1px;
-	height: 100px;
-	background: linear-gradient(
-		to bottom,
-		transparent,
-		rgba(255, 255, 255, 0.2),
-		transparent
-	);
-}
-
-/* =========================================
-   ULTRA-SMALL SCREENS (320px - 400px)
-   ========================================= */
-@media (max-width: 768px) {
-	/* Hide dividers on mobile to save space */
-	.gift-divider {
-		display: none;
-	}
-
-	.gift-grid {
-		gap: 0.5rem;
-	}
-}
-
-/* =========================================
-   DRESS CODE SECTION
-   ========================================= */
-.dress-code-section {
-	padding: var(--spacing-lg) var(--spacing-sm);
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
-.dress-code-content {
-	/* A soft, premium gradient container */
-	background: radial-gradient(
-		circle at top,
-		rgba(255, 255, 255, 0.05) 0%,
-		transparent 70%
-	);
-	border-radius: var(--border-radius);
-	padding: 3rem 2rem;
-	text-align: center;
-	max-width: 500px;
-	width: 100%;
-	transition: transform 0.3s ease;
-}
-
-.dress-code-content:hover {
-	transform: translateY(-5px);
-}
-
-.dress-icon-wrapper {
-	display: inline-flex;
-	justify-content: center;
-	align-items: center;
-	width: 80px;
-	height: 80px;
-	border-radius: 50%;
-	background: rgba(255, 199, 44, 0.1);
-	color: var(--color-yellow);
-	margin-bottom: 1.5rem;
-	/* Soft glow effect */
-	box-shadow: 0 0 20px rgba(255, 199, 44, 0.15);
-}
-
-.dress-text {
-	font-family: var(--font-body);
-	color: var(--color-white);
-	font-size: 1.1rem;
-	line-height: 1.6;
-	font-weight: 600;
-	margin: 0;
-}
-
-/* Mobile Adjustments */
-@media (max-width: 400px) {
-	.dress-code-content {
-		padding: 2rem 1rem;
-	}
-	.dress-icon-wrapper {
-		width: 60px;
-		height: 60px;
-		margin-bottom: 1rem;
-	}
-	.dress-icon-wrapper svg {
-		width: 30px;
-		height: 30px;
-	}
-	.dress-text {
-		font-size: 1rem;
 	}
 }

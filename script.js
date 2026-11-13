@@ -359,4 +359,45 @@ document.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
+	// ==========================================
+	// 10. CUSTOM DROPDOWN LOGIC
+	// ==========================================
+	const dropdown = document.getElementById('guest-dropdown');
+	const trigger = document.getElementById('guest-trigger');
+	const options = document.querySelectorAll('.select-options li');
+	const label = document.getElementById('guest-label');
+	const hiddenInput = document.getElementById('guests-input');
+
+	if (dropdown && trigger) {
+		// Toggle menu on click
+		trigger.addEventListener('click', (e) => {
+			e.preventDefault(); // Stops any form submission interference
+			e.stopPropagation(); // Prevents immediate closing
+			dropdown.classList.toggle('open');
+		});
+
+		// Handle option selection
+		options.forEach(option => {
+			option.addEventListener('click', (e) => {
+				e.stopPropagation();
+
+				options.forEach(o => o.classList.remove('selected'));
+				option.classList.add('selected');
+
+				const value = option.getAttribute('data-value');
+				label.textContent = value;
+				hiddenInput.value = value;
+
+				dropdown.classList.remove('open');
+			});
+		});
+
+		// Close menu when clicking outside
+		document.addEventListener('click', (e) => {
+			if (!dropdown.contains(e.target)) {
+				dropdown.classList.remove('open');
+			}
+		});
+	}
+
 });
