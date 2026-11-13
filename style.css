@@ -877,186 +877,222 @@ img {
 }
 
 /* =========================================
-   11. PREMIUM SCRAPBOOK MILESTONES V2
+   PREMIUM MILESTONES CAROUSEL
    ========================================= */
-.milestones {
-	padding: 5rem 1rem;
-	position: relative;
-	overflow: hidden;
+.milestones-carousel-section {
+	padding: var(--spacing-lg) var(--spacing-sm);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	max-width: 800px;
+	margin: 0 auto;
 }
 
-.milestones::before {
+/* The Main Container (The Frame) */
+.premium-carousel {
+	position: relative;
+	width: 100%;
+	max-width: 500px;
+	aspect-ratio: 4 / 5;
+
+	/* THE PREMIUM FRAME DESIGN */
+	border: 14px solid #fdfbf7; /* Thick ivory/white matting */
+	border-radius: 8px; /* Slight rounding for a modern gallery look */
+	background-color: #fdfbf7;
+
+	/* Deep shadow to lift the frame off the page + subtle inner shadow for depth */
+	box-shadow:
+		0 25px 50px -12px rgba(0, 0, 0, 0.6),
+		0 0 0 1px rgba(0, 0, 0, 0.05);
+
+	overflow: hidden;
+	contain: layout paint;
+	touch-action: pan-y;
+	transition:
+		transform 0.4s ease,
+		box-shadow 0.4s ease;
+}
+
+/* A slight lift on hover to make it tactile */
+.premium-carousel:hover {
+	transform: translateY(-5px);
+	box-shadow:
+		0 35px 60px -15px rgba(0, 0, 0, 0.7),
+		0 0 0 1px rgba(0, 0, 0, 0.05);
+}
+
+/* The Inset Shadow on the Photos */
+/* This makes the image look physically pressed into the matting */
+.carousel-slide::after {
 	content: "";
 	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	width: 80vw;
-	height: 80vw;
-	background: radial-gradient(
-		circle,
-		rgba(75, 44, 112, 0.4) 0%,
-		transparent 70%
-	);
-	z-index: 0;
+	inset: 0;
+	box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
 	pointer-events: none;
+	z-index: 2;
 }
 
-.timeline-wrapper {
-	position: relative;
-	max-width: 900px;
-	margin: 0 auto;
-	padding: 2rem 0;
-	z-index: 1;
+/* Adjust the caption to sit inside the new frame */
+.slide-caption {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 3rem 1.5rem 4rem 1.5rem;
+	background: linear-gradient(
+		to top,
+		rgba(0, 0, 0, 0.9) 0%,
+		rgba(0, 0, 0, 0.5) 50%,
+		transparent 100%
+	);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 4px;
+	z-index: 3;
 }
 
-.timeline-line {
+/* The Images */
+.carousel-slide {
 	position: absolute;
 	top: 0;
-	bottom: 0;
-	left: 50%;
-	width: 4px;
-	background: linear-gradient(
-		to bottom,
-		var(--color-yellow),
-		#ff9d00,
-		var(--color-yellow)
-	);
-	background-size: 100% 40px;
-	-webkit-mask-image: linear-gradient(
-		to bottom,
-		transparent,
-		black 10%,
-		black 90%,
-		transparent
-	);
-	mask-image: linear-gradient(
-		to bottom,
-		transparent,
-		black 10%,
-		black 90%,
-		transparent
-	);
-	transform: translateX(-50%);
-	z-index: 0;
-	box-shadow: 0 0 15px rgba(255, 199, 44, 0.4);
-}
-
-.milestone-row {
-	position: relative;
-	display: flex;
-	justify-content: flex-end;
-	padding-left: 50%;
-	margin-bottom: 4rem;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+	transform: scale(1.05); /* Slight zoom effect */
+	transition:
+		opacity 0.8s ease-in-out,
+		transform 1.2s ease;
 	z-index: 1;
+	pointer-events: none; /* Prevent clicking hidden images */
 }
 
-.milestone-row:nth-child(even) {
-	justify-content: flex-start;
-	padding-left: 0;
-	padding-right: 50%;
+.carousel-slide.active {
+	opacity: 1;
+	transform: scale(1);
+	z-index: 2;
+	pointer-events: auto;
 }
 
-.timeline-dot {
+.carousel-img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* The Glassmorphism Caption */
+.slide-caption {
 	position: absolute;
-	top: 40px;
-	left: 50%;
-	width: 24px;
-	height: 24px;
-	background: var(--color-purple-dark);
-	border: 4px solid var(--color-yellow);
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 3rem 1.5rem 4.5rem 1.5rem; /* Large bottom padding for dots */
+	background: linear-gradient(
+		to top,
+		rgba(0, 0, 0, 0.9) 0%,
+		rgba(0, 0, 0, 0.6) 50%,
+		transparent 100%
+	);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	text-align: center;
+	gap: 4px;
+	z-index: 3;
+}
+
+.s-month {
+	font-family: var(--font-heading);
+	color: var(--color-yellow);
+	font-size: clamp(1.5rem, 4vw, 2rem);
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	line-height: 1;
+}
+
+.s-title {
+	font-family: var(--font-body);
+	color: var(--color-white);
+	font-size: 1rem;
+	font-weight: 700;
+}
+
+/* Navigation Arrows (Desktop) */
+.carousel-arrow {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 44px;
+	height: 44px;
 	border-radius: 50%;
-	transform: translate(-50%, -50%);
-	z-index: 5;
-	box-shadow:
-		0 0 0 5px rgba(255, 199, 44, 0.2),
-		0 0 20px var(--color-yellow);
+	background: rgba(255, 255, 255, 0.2);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	backdrop-filter: blur(5px);
+	-webkit-backdrop-filter: blur(5px);
+	color: var(--color-white);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	z-index: 10;
+	transition: all 0.2s ease;
+}
+
+.carousel-arrow:hover {
+	background: var(--color-yellow);
+	color: var(--color-purple-dark);
+	transform: translateY(-50%) scale(1.1);
+}
+
+.carousel-arrow.prev {
+	left: 15px;
+}
+.carousel-arrow.next {
+	right: 15px;
+}
+
+/* Indicator Dots */
+.carousel-dots {
+	position: absolute;
+	bottom: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	display: flex;
+	gap: 8px;
+	z-index: 10;
+}
+
+.dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background-color: rgba(255, 255, 255, 0.4);
+	cursor: pointer;
 	transition: all 0.3s ease;
 }
 
-.milestone-card {
-	width: 85%;
-	max-width: 340px;
-	position: relative;
-	padding-top: 10px;
+.dot.active {
+	background-color: var(--color-yellow);
+	width: 24px; /* Pill shape for active dot */
+	border-radius: 10px;
 }
 
-.tape {
-	position: absolute;
-	top: -5px;
-	left: 50%;
-	transform: translateX(-50%) rotate(-4deg);
-	width: 100px;
-	height: 30px;
-	background: rgba(255, 255, 255, 0.4);
-	backdrop-filter: blur(4px);
-	-webkit-backdrop-filter: blur(4px);
-	border-left: 2px dashed rgba(255, 255, 255, 0.6);
-	border-right: 2px dashed rgba(255, 255, 255, 0.6);
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-	z-index: 10;
-}
-
-.polaroid {
-	background: var(--color-white);
-	padding: 12px 12px 24px 12px;
-	border-radius: 8px;
-	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
-	transform: rotate(-3deg);
-	transition:
-		transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
-		box-shadow 0.4s ease;
-	position: relative;
-}
-
-.milestone-row:nth-child(even) .polaroid {
-	transform: rotate(3deg);
-}
-
-.milestone-card:hover .polaroid {
-	transform: rotate(0deg) scale(1.05) translateY(-10px);
-	box-shadow: 0 25px 50px rgba(255, 199, 44, 0.3);
-	z-index: 10;
-}
-
-.milestone-card:hover .timeline-dot {
-	background: var(--color-yellow);
-	box-shadow:
-		0 0 0 8px rgba(255, 199, 44, 0.3),
-		0 0 30px var(--color-yellow);
-}
-
-.polaroid img {
-	width: 100%;
-	aspect-ratio: 1 / 1;
-	object-fit: cover;
-	border-radius: 4px;
-	margin-bottom: 15px;
-	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.polaroid-caption {
-	text-align: center;
-	display: flex;
-	flex-direction: column;
-	gap: 6px;
-}
-
-.m-month {
-	font-family: var(--font-heading);
-	background: linear-gradient(45deg, #9333ea, #4b2c70);
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
-	font-size: 1.3rem;
-	text-transform: uppercase;
-	letter-spacing: 1px;
-}
-
-.m-title {
-	font-family: var(--font-body);
-	color: #555;
-	font-size: 0.95rem;
-	font-weight: 800;
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+	.carousel-arrow {
+		display: none; /* Hide arrows on mobile, use swipe */
+	}
+	.slide-caption {
+		padding: 3rem 1rem 4rem 1rem; /* Tighter padding for mobile */
+	}
+	.s-month {
+		font-size: 1.6rem;
+	}
+	.s-title {
+		font-size: 0.9rem;
+	}
 }
 
 /* =========================================
@@ -1736,6 +1772,9 @@ footer::before {
 	text-transform: uppercase;
 }
 
+/* =========================================
+   FLOATING MUTE BUTTON
+   ========================================= */
 .mute-btn {
 	position: fixed !important;
 	bottom: 24px !important;
@@ -1746,7 +1785,6 @@ footer::before {
 	border-radius: 50%;
 	width: 55px;
 	height: 55px;
-	font-size: 1.3rem;
 	color: var(--color-white);
 	cursor: pointer;
 	display: none;
@@ -1763,11 +1801,41 @@ footer::before {
 .mute-btn.active {
 	display: flex !important;
 }
+
 .mute-btn:hover,
 .mute-btn:focus-visible {
 	transform: scale(1.1);
 	background: rgba(50, 27, 77, 1);
 	outline: none;
+	color: var(--color-yellow); /* Icon turns yellow on hover */
+}
+
+/* --- ICON TOGGLE LOGIC --- */
+.mute-btn svg {
+	position: absolute;
+	transition:
+		opacity 0.3s ease,
+		transform 0.3s ease;
+}
+
+/* Default: Show Sound On, Hide Sound Off */
+.mute-btn .icon-sound-on {
+	opacity: 1;
+	transform: scale(1);
+}
+.mute-btn .icon-sound-off {
+	opacity: 0;
+	transform: scale(0.5);
+}
+
+/* When Muted: Hide Sound On, Show Sound Off */
+.mute-btn.is-muted .icon-sound-on {
+	opacity: 0;
+	transform: scale(0.5);
+}
+.mute-btn.is-muted .icon-sound-off {
+	opacity: 1;
+	transform: scale(1);
 }
 
 /* =========================================

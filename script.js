@@ -259,11 +259,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		muteBtn.addEventListener('click', () => {
 			if (isMusicMuted) {
 				bgMusic.play();
-				muteBtn.innerText = '🔊';
+				muteBtn.classList.remove('is-muted'); // CSS handles the icon swap
 				muteBtn.setAttribute('aria-label', 'Mute background music');
 			} else {
 				bgMusic.pause();
-				muteBtn.innerText = '🔇';
+				muteBtn.classList.add('is-muted'); // CSS handles the icon swap
 				muteBtn.setAttribute('aria-label', 'Unmute background music');
 			}
 			isMusicMuted = !isMusicMuted;
@@ -398,6 +398,104 @@ document.addEventListener('DOMContentLoaded', () => {
 				dropdown.classList.remove('open');
 			}
 		});
+	}
+
+	// ==========================================
+	// 11. PREMIUM CAROUSEL LOGIC
+	// ==========================================
+	const carousel = document.getElementById('milestone-carousel');
+	const slides = document.querySelectorAll('.carousel-slide');
+	const dotsContainer = document.getElementById('carousel-dots');
+	const prevBtn = document.getElementById('prev-btn');
+	const nextBtn = document.getElementById('next-btn');
+
+	if (carousel && slides.length > 0) {
+		let currentIndex = 0;
+		let autoPlayInterval;
+		const intervalTime = 3500; // 3.5 seconds per slide
+
+		// 1. Generate Dots dynamically
+		slides.forEach((_, index) => {
+			const dot = document.createElement('div');
+			dot.classList.add('dot');
+			if (index === 0) dot.classList.add('active');
+			dot.addEventListener('click', () => goToSlide(index));
+			dotsContainer.appendChild(dot);
+		});
+
+		const dots = document.querySelectorAll('.dot');
+
+		// 2. The function to change slides
+		const goToSlide = (index) => {
+			// Remove active class from current
+			slides[currentIndex].classList.remove('active');
+			dots[currentIndex].classList.remove('active');
+
+			// Update index (handle looping)
+			currentIndex = (index + slides.length) % slides.length;
+
+			// Add active class to new
+			slides[currentIndex].classList.add('active');
+			dots[currentIndex].classList.add('active');
+		};
+
+		// 3. AutoPlay Functions
+		const startAutoPlay = () => {
+			autoPlayInterval = setInterval(() => {
+				goToSlide(currentIndex + 1);
+			}, intervalTime);
+		};
+
+		const stopAutoPlay = () => {
+			clearInterval(autoPlayInterval);
+		};
+
+		// 4. Arrow Click Listeners
+		prevBtn.addEventListener('click', () => {
+			goToSlide(currentIndex - 1);
+			stopAutoPlay();
+			startAutoPlay(); // Reset timer
+		});
+
+		nextBtn.addEventListener('click', () => {
+			goToSlide(currentIndex + 1);
+			stopAutoPlay();
+			startAutoPlay(); // Reset timer
+		});
+
+		// 5. Pause on Hover (Desktop)
+		carousel.addEventListener('mouseenter', stopAutoPlay);
+		carousel.addEventListener('mouseleave', startAutoPlay);
+
+		// 6. Swipe Support (Mobile)
+		let touchStartX = 0;
+		let touchEndX = 0;
+
+		carousel.addEventListener('touchstart', (e) => {
+			touchStartX = e.changedTouches[0].screenX;
+			stopAutoPlay(); // Pause while swiping
+		}, { passive: true });
+
+		carousel.addEventListener('touchend', (e) => {
+			touchEndX = e.changedTouches[0].screenX;
+			handleSwipe();
+			startAutoPlay(); // Resume after swipe
+		}, { passive: true });
+
+		const handleSwipe = () => {
+			const swipeThreshold = 50; // Minimum distance to trigger a swipe
+
+			if (touchEndX < touchStartX - swipeThreshold) {
+				// Swiped Left -> Next Slide
+				goToSlide(currentIndex + 1);
+			} else if (touchEndX > touchStartX + swipeThreshold) {
+				// Swiped Right -> Prev Slide
+				goToSlide(currentIndex - 1);
+			}
+		};
+
+		// 7. Start the carousel
+		startAutoPlay();
 	}
 
 });
