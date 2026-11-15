@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <!-- Grimace Purple Background with rounded corners -->
+    <rect width="100" height="100" rx="20" fill="#4b2c70"/>
+    <!-- McDonald's Yellow Golden Arches -->
+    <path d="M25 80 V40 C25 20 45 20 50 35 C55 20 75 20 75 40 V80 H60 V40 C60 30 55 30 50 45 C45 30 40 30 40 40 V80 Z" fill="#ffc72c"/>
+</svg>
