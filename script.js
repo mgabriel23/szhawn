@@ -329,33 +329,47 @@ document.addEventListener('DOMContentLoaded', () => {
 	updateCountdown();
 
 	// ==========================================
-	// 7. ADD TO CALENDAR (.ics) GENERATOR
+	// 7. ADD TO CALENDAR (.ics) GENERATOR (Bulletproof)
 	// ==========================================
 	const calendarBtn = document.getElementById('add-to-calendar-btn');
 
 	if (calendarBtn) {
-		calendarBtn.addEventListener('click', () => {
-			// Updated Event Details
+		calendarBtn.addEventListener('click', (e) => {
+			e.preventDefault(); // Prevent any default button behavior
+
 			const title = "Szhawn's 1st Birthday and Baptism";
 			const location = "San Francisco de Assisi Parish Church & Government Center, Meycauayan, Bulacan";
-			// Format: YYYYMMDDTHHmmSS (Local time)
-			const startTime = "20261213T120000"; // 12:00 PM
-			const endTime = "20261213T160000"; // Assuming 4:00 PM end time
-			const description = "Baptism at 12:00 NN at San Francisco de Assisi Parish Church (Gasak). Reception at 1:00 PM at Government Center (Saluysoy).";
+			const description = "Baptism at 12:00 NN at San Francisco de Assisi Parish. Reception at 1:00 PM at Government Center. We can't wait to celebrate with you!";
 
-			// ICS File Formatting
-			const icsContent = `BEGIN:VCALENDAR
-				VERSION:2.0
-				PRODID:-//Szhawn Invite//EN
-				BEGIN:VEVENT
-				SUMMARY:${title}
-				DTSTART:${startTime}
-				DTEND:${endTime}
-				LOCATION:${location}
-				DESCRIPTION:${description}
-				STATUS:CONFIRMED
-				END:VEVENT
-				END:VCALENDAR`;
+			// Time needs to be in UTC format (YYYYMMDDTHHmmSSZ) for universal compatibility.
+			// 12:00 PM PHT (GMT+8) is 04:00 AM UTC.
+			const startTime = "20261213T040000Z";
+			// 4:00 PM PHT (GMT+8) is 08:00 AM UTC.
+			const endTime = "20261213T080000Z";
+
+			// We use an array and .join("\r\n") to force strict CRLF line endings
+			const icsLines = [
+				"BEGIN:VCALENDAR",
+				"VERSION:2.0",
+				"PRODID:-//Szhawn Invite//EN",
+				"CALSCALE:GREGORIAN",
+				"METHOD:PUBLISH",
+				"BEGIN:VEVENT",
+				`UID:${Date.now()}@szhawnparty.com`,
+				`DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,
+				`DTSTART:${startTime}`,
+				`DTEND:${endTime}`,
+				`SUMMARY:${title}`,
+				`LOCATION:${location}`,
+				`DESCRIPTION:${description}`,
+				"STATUS:CONFIRMED",
+				"SEQUENCE:0",
+				"END:VEVENT",
+				"END:VCALENDAR"
+			];
+
+			// The CRITICAL FIX: Join with \r\n instead of just \n
+			const icsContent = icsLines.join("\r\n");
 
 			// Create the file and trigger download
 			const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
