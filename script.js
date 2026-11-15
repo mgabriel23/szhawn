@@ -329,25 +329,35 @@ document.addEventListener('DOMContentLoaded', () => {
 	updateCountdown();
 
 	// ==========================================
-	// 7. ADD TO CALENDAR (.ics) GENERATOR (Bulletproof)
+	// 7. ADD TO CALENDAR (.ics) GENERATOR + FALLBACK
 	// ==========================================
 	const calendarBtn = document.getElementById('add-to-calendar-btn');
 
 	if (calendarBtn) {
 		calendarBtn.addEventListener('click', (e) => {
-			e.preventDefault(); // Prevent any default button behavior
+			e.preventDefault();
 
+			// Detect if we are in an in-app browser like Messenger
+			const isInApp = /FBAN|FBAV|Messenger/i.test(navigator.userAgent);
+
+			if (isInApp) {
+				// The .ics download will fail here.
+				// We will redirect to the Google Calendar link instead.
+				const googleCalendarUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Szhawn's+1st+Birthday+and+Baptism&dates=20261213T040000Z/20261213T080000Z&details=Join+us+in+celebrating+Szhawn's+1st+Birthday+and+Baptism!&location=San+Francisco+de+Assisi+Parish+Church+%26+Government+Center,+Meycauayan,+Bulacan";
+				window.open(googleCalendarUrl, '_blank');
+				return;
+			}
+
+			// Original .ics generation for standard browsers
 			const title = "Szhawn's 1st Birthday and Baptism";
 			const location = "San Francisco de Assisi Parish Church & Government Center, Meycauayan, Bulacan";
 			const description = "Baptism at 12:00 NN at San Francisco de Assisi Parish. Reception at 1:00 PM at Government Center. We can't wait to celebrate with you!";
 
-			// Time needs to be in UTC format (YYYYMMDDTHHmmSSZ) for universal compatibility.
 			// 12:00 PM PHT (GMT+8) is 04:00 AM UTC.
 			const startTime = "20261213T040000Z";
 			// 4:00 PM PHT (GMT+8) is 08:00 AM UTC.
 			const endTime = "20261213T080000Z";
 
-			// We use an array and .join("\r\n") to force strict CRLF line endings
 			const icsLines = [
 				"BEGIN:VCALENDAR",
 				"VERSION:2.0",
@@ -368,10 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				"END:VCALENDAR"
 			];
 
-			// The CRITICAL FIX: Join with \r\n instead of just \n
 			const icsContent = icsLines.join("\r\n");
-
-			// Create the file and trigger download
 			const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
 			const link = document.createElement('a');
 			link.href = window.URL.createObjectURL(blob);
