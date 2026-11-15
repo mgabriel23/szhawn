@@ -145,36 +145,58 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	// ==========================================
-	// 5. SUPER CONFETTI BURST
+	// 5. SUPER CONFETTI BURST (Optimized for Low-End)
 	// ==========================================
 	const triggerSuperConfetti = () => {
 		if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-		// 1. The Initial Massive Burst (Center screen)
+		// 1. Clear any existing confetti to free up memory
+		if (typeof confetti.reset === 'function') {
+			confetti.reset();
+		}
+
+		// 2. Initial Burst (Reduced from 150 to 80 for performance)
 		confetti({
-			particleCount: 150,
+			particleCount: 80,
 			spread: 100,
 			origin: { y: 0.6 },
 			zIndex: 9999,
 			colors: ['#ffc72c', '#DA291C', '#4b2c70', '#ffffff'],
-			disableForReducedMotion: true
+			disableForReducedMotion: true,
+			ticks: 40 // Particles disappear faster
 		});
 
-		// 2. The Cascading Rain (Sides)
-		var duration = 3 * 1000;
+		// 3. Cascading Rain (Optimized using requestAnimationFrame)
+		var duration = 2000; // Reduced from 3s to 2s
 		var animationEnd = Date.now() + duration;
-		var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
+		var defaults = {
+			startVelocity: 25,
+			spread: 360,
+			ticks: 40, // Faster cleanup
+			zIndex: 9999
+		};
 
-		function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+		function randomInRange(min, max) {
+			return Math.random() * (max - min) + min;
+		}
 
-		var interval = setInterval(function () {
+		// Use requestAnimationFrame instead of setInterval.
+		// This prevents the browser from freezing if the frame rate drops.
+		function frame() {
 			var timeLeft = animationEnd - Date.now();
-			if (timeLeft <= 0) return clearInterval(interval);
+			if (timeLeft <= 0) return; // Stop the loop entirely
 
-			var particleCount = 40 * (timeLeft / duration);
+			// Drastically reduced particle count per frame
+			var particleCount = 15 * (timeLeft / duration);
+
 			confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
 			confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-		}, 250);
+
+			requestAnimationFrame(frame);
+		}
+
+		// Start the loop
+		requestAnimationFrame(frame);
 	};
 
 	// ==========================================
@@ -186,17 +208,16 @@ document.addEventListener('DOMContentLoaded', () => {
 		if (hasTransitionedToMain) return;
 		hasTransitionedToMain = true;
 
-		// 1. Play Background Music & Show Mute Button
 		if (bgMusic) {
 			bgMusic.volume = 0.4;
 			bgMusic.play().catch(e => console.log("BG music autoplay blocked:", e));
 			muteBtn.classList.add('active');
 		}
 
-		// 2. Fire the Confetti IMMEDIATELY
+		// 1. Fire the Optimized Confetti
 		triggerSuperConfetti();
 
-		// 3. Wait 200ms for the confetti to burst, then swap scenes
+		// 2. Wait 200ms for the confetti to burst, then swap scenes
 		setTimeout(() => {
 
 			const heroElements = document.querySelectorAll('#scene-main .hero .animate-on-scroll');
@@ -205,12 +226,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				el.classList.add('is-visible');
 			});
 
-			// Instantly hide the video scene
 			scenes.start.style.transition = 'none';
 			scenes.start.classList.remove('active');
 			scenes.start.style.display = 'none';
 
-			// Fade in the main scene smoothly (0.6s instead of 0.2s)
 			scenes.main.style.transition = 'opacity 0.6s ease-in-out';
 			scenes.main.style.display = 'flex';
 			scenes.main.style.opacity = '0';
@@ -225,14 +244,21 @@ document.addEventListener('DOMContentLoaded', () => {
 				}, 10);
 			});
 
-			// Cleanup: Wait 600ms before removing inline styles
 			setTimeout(() => {
 				heroElements.forEach(el => { el.style.transition = ''; });
 				scenes.main.style.transition = '';
 				scenes.main.style.opacity = '';
-			}, 600); // Matches the 0.6s fade time
+			}, 600);
 
-		}, 200); // 200ms initial delay for the confetti burst
+			// 3. THE FIX: Hard reset the canvas after 3.5 seconds
+			// This guarantees the canvas is wiped clean and stops using CPU
+			setTimeout(() => {
+				if (typeof confetti.reset === 'function') {
+					confetti.reset();
+				}
+			}, 3500);
+
+		}, 200);
 	};
 
 	// 6. The High-Performance Video Monitor
@@ -343,19 +369,85 @@ document.addEventListener('DOMContentLoaded', () => {
 	}
 
 	// ==========================================
-	// 9. RSVP FORM HANDLING
+	// 9. RSVP FORM HANDLING (Validation & AJAX)
 	// ==========================================
 	const form = document.getElementById('rsvp-form');
 	if (form) {
+		const fieldsContainer = document.getElementById('form-fields');
+		const successMessage = document.getElementById('form-success');
+		const submitBtn = document.getElementById('submit-btn');
+		const btnText = document.getElementById('btn-text');
+		const btnIcon = document.getElementById('btn-icon');
+
 		form.addEventListener('submit', function (e) {
-			const btn = form.querySelector('button[type="submit"]');
-			const originalText = btn.innerText;
-			btn.innerText = "Sending...";
-			btn.disabled = true;
-			setTimeout(() => {
-				btn.innerText = originalText;
-				btn.disabled = false;
-			}, 5000);
+			e.preventDefault(); // Prevent standard page reload
+
+			// 1. Basic Validation Check
+			let isValid = true;
+			const nameInput = document.getElementById('name');
+			const attendanceInputs = document.querySelectorAll('input[name="attendance"]');
+
+			// Remove old error states
+			document.querySelectorAll('.form-group').forEach(el => el.classList.remove('has-error'));
+
+			// Check Name
+			if (nameInput.value.trim() === '') {
+				nameInput.parentElement.classList.add('has-error');
+				isValid = false;
+			}
+
+			// Check Attendance (Radio Buttons)
+			let attendanceSelected = false;
+			attendanceInputs.forEach(input => {
+				if (input.checked) attendanceSelected = true;
+			});
+			if (!attendanceSelected) {
+				document.querySelector('.attendance-toggle').parentElement.classList.add('has-error');
+				isValid = false;
+			}
+
+			if (!isValid) {
+				// Stop submission and gently shake the form
+				form.style.animation = 'none';
+				setTimeout(() => { form.style.animation = 'shake 0.4s ease'; }, 10);
+				return;
+			}
+
+			// 2. Prepare for AJAX Submission
+			btnText.innerText = "Sending...";
+			btnIcon.style.display = 'none'; // Hide the paper plane icon
+			submitBtn.disabled = true;
+
+			// 3. Send data to Web3Forms via Fetch API
+			const formData = new FormData(form);
+
+			fetch(form.action, {
+				method: 'POST',
+				body: formData
+			})
+				.then(response => response.json())
+				.then(data => {
+					if (data.success) {
+						// 4. Show Success Message (Hide Form)
+						fieldsContainer.style.display = 'none';
+						successMessage.classList.remove('hidden');
+					} else {
+						// Handle Web3Forms errors (e.g., invalid access key)
+						alert("Something went wrong. Please check your Web3Forms access key.");
+						resetButton();
+					}
+				})
+				.catch(error => {
+					console.error('Error:', error);
+					alert("Network error. Please try again.");
+					resetButton();
+				});
+
+			function resetButton() {
+				btnText.innerText = "Send RSVP Response";
+				btnIcon.style.display = 'block';
+				submitBtn.disabled = false;
+			}
 		});
 	}
 
